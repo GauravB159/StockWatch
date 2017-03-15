@@ -1,0 +1,135 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,700");
+body {
+  background-image: url("../Img/stock.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed; }
+
+.text {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: white; }
+
+.glyphicon-search {
+  color: black !important; }
+
+.o3 {
+  background-color: rgba(0, 0, 0, 0.35); }
+
+.o9 {
+  background-color: rgba(0, 0, 0, 0.9); }
+
+.navbar {
+  background-color: rgba(0, 0, 0, 0.7); }
+  .navbar * {
+    color: white; }
+
+.nav.navbar-nav li a {
+  color: white; }
+
+.navbar-brand {
+  color: white !important;
+  font-size: 24px; }
+
+.nav.navbar-nav a:hover {
+  color: grey; }
+
+.boldem li {
+  font-weight: bold; }
+
+.glyphicon-chevron-up {
+  color: green !important; }
+
+.glyphicon-chevron-down {
+  color: red !important; }
+
+.navbar-form {
+  margin-top: 18px; }
+
+.navbar-brand,
+.navbar-nav li a {
+  line-height: 70px;
+  height: 70px;
+  padding-top: 0; }
+
+.tooltip {
+  font-family: "Montserrat", sans-serif;
+  font-size: 15px; }
+  .tooltip .tooltip-inner {
+    background-color: rgba(0, 0, 0, 0.8);
+    min-width: 100px; }
+
+.former, .formers {
+  border-radius: 0;
+  color: white;
+  font-weight: bold;
+  font-size: 22px;
+  font-family: "Montserrat", sans-serif;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: none;
+  width: 60%; }
+
+.btn, .bttn {
+  border-radius: 0;
+  font-family: "Montserrat", sans-serif; }
+
+.bttn {
+  font-size: 20px; }
+
+.formers {
+  background-color: white;
+  color: rgba(0, 0, 0, 0.8); }
+
+table {
+  margin-top: 90px;
+  width: 100%;
+  height: 550px;
+  border: 4px solid black; }
+
+td {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2px solid rgba(0, 0, 0, 0.7);
+  text-align: center;
+  font-size: 40px;
+  min-width: 100% /8;
+  max-width: 100% /8; }
+
+table.fixed {
+  table-layout: fixed; }
+  table.fixed td {
+    overflow: hidden; }
+
+.green {
+  color: green; }
+
+.conv, .from, .to, .val {
+  cursor: pointer; }
+
+.o9 {
+  background-color: rgba(0, 0, 0, 0.9); }
+
+.val:hover, .conv:hover {
+  background-color: rgba(0, 0, 0, 0.9); }
+
+.hidde {
+  visibility: hidden; }
+
+.visib {
+  border-left: 3px solid black;
+  border-right: 3px solid black; }
+  .visib span {
+    margin-left: -250px; }
+
+.from2, .to2 {
+  width: 100px !important; }
+
+.frm {
+  width: 100%;
+  height: 100%;
+  line-height: 30px;
+  padding-left: 20px;
+  background-color: transparent;
+  border: none; }
+
+/*# sourceMappingURL=currency.css.map */

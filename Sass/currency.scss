@@ -1,0 +1,57 @@
+@import "body";
+@import "navbar";
+@import "forms";
+table{
+    margin-top:90px;
+    width:100%;
+    height:550px;
+    border: 4px solid rgba(0,0,0,1);
+}
+td{
+    background-color:rgba(0,0,0,0.7);
+    border: 2px solid rgba(0,0,0,0.7);
+    text-align:center;
+    font-size: 40px;
+    min-width: 100% /8;
+    max-width: 100% /8;
+}
+table.fixed { 
+    table-layout:fixed; 
+    td{
+     overflow: hidden;
+    }
+}
+.green{
+    color:green;
+}
+.conv, .from,.to,.val{
+    cursor: pointer;
+}   
+.o9{
+    background-color:rgba(0,0,0,0.9);
+}
+.val:hover, .conv:hover{
+    background-color:rgba(0,0,0,0.9);
+}
+.hidde{
+    visibility: hidden;
+}
+.visib{
+    border-left: 3px solid black;
+    border-right: 3px solid black;
+    span{
+        margin-left: -250px;
+    }
+}
+
+.from2,.to2{
+    width:100px !important;
+}
+.frm{
+    width: 100%;
+    height: 100%;
+    line-height:30px;
+    padding-left:20px;
+    background-color:transparent;
+    border:none;
+}
