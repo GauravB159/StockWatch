@@ -1,0 +1,54 @@
+.glyphicon-search{
+    color: black !important;
+}
+.o3{
+    background-color: rgba(0,0,0,0.35);
+}
+.o9{
+    background-color: rgba(0,0,0,0.9);
+}
+.navbar{
+    background-color: rgba(0,0,0,0.7);
+    *{
+        color: $text-color;
+    }
+}
+.nav.navbar-nav li a{
+   color: $text-color;
+ }
+.navbar-brand{
+   color: $text-color !important;
+   font-size:24px;
+}
+.nav.navbar-nav a:hover {
+ color: grey;
+}
+.boldem{
+    li{
+        font-weight: bold;
+    }
+}
+.glyphicon-chevron-up{
+    color: green !important;
+}
+.glyphicon-chevron-down{
+    color: red !important;
+}
+.navbar-form{
+    margin-top: 18px;
+}
+.navbar-brand,
+.navbar-nav li a {
+    line-height: 70px;
+    height: 70px;
+    padding-top: 0;
+}
+
+.tooltip {
+  font-family: $font-family;
+  font-size: 15px;
+    .tooltip-inner {
+       background-color: rgba(0,0,0,0.8);
+       min-width: 100px;
+    }
+}

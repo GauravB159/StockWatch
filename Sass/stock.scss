@@ -1,0 +1,89 @@
+@import "body";
+@import "navbar";
+@import "forms";
+.act{
+    box-sizing: border-box;
+    background-color:black;
+    margin:0;
+    padding-top:17.5px;
+    padding-bottom:18px;
+}
+.ticker{
+    font-size:35px;
+    margin-top:100px;
+    margin-left:20px;
+    margin-right:50px;
+    background-color:rgba(0,0,0,0.9);
+    width:fit-content;
+    padding:0 20px;
+    display: inline-block;    
+}
+.ib{
+    @extend .ticker;
+    margin-left:0;
+    margin-right:0;    
+    background-color:rgba(0,0,0,0.7); 
+    border-top:3px solid black;  
+    border-right:3px solid black;    
+    height:53px;
+}
+.ibcl{
+    @extend .ib;
+    cursor:pointer;
+    margin-left:-5px;
+}
+.acti{
+    background-color:rgba(0,0,0,0.9);
+}
+.col-sm-6{
+    background-color:rgba(0,0,0,0.7);
+    height:500px;
+    width:47%;
+    padding:0;
+}
+.first{
+    margin-left:35px;
+}
+.second{
+    margin-left:-2px;
+}
+.glyphicon-chevron-up{
+    font-size:20px;
+}
+.updown{
+    color:green;
+    font-family:$font-family;
+    font-size:20px;
+    
+}
+table{
+    box-sizing:border-box;
+    width:100%;
+    height:500px;
+}
+.check{}
+
+td{
+    border: 2px solid rgba(0,0,0,0.7);
+    text-align:center;
+    font-size: 40px;
+    width:25%;
+}
+.data{
+    font-family:$font-family;
+    font-weight:700;
+    font-size:37px;
+}
+.date{
+    font-size:24px;
+    margin:0;
+    margin-left:-20px;
+    background-color:transparent;
+}
+.red{
+    color: red;
+}
+.green{
+    color:green;
+}
+

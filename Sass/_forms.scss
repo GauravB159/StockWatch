@@ -1,0 +1,23 @@
+.former{
+    border-radius: 0;
+    color: white;
+    font-weight: bold;
+    font-size:22px;
+    font-family: $font-family;
+    background-color: rgba(0,0,0,0.8);
+    border: none;
+    width:60%;
+}
+.btn{
+    border-radius: 0;
+    font-family: $font-family;
+}
+.bttn{
+    @extend .btn;
+    font-size:20px;    
+}
+.formers{
+    @extend .former;
+    background-color: white;
+    color: rgba(0,0,0,0.8);
+}

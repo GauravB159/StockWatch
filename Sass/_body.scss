@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
+$text-color: white;
+$font-family:'Montserrat', sans-serif;
+body{
+    background-image: url("../Img/stock.jpg");
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-attachment: fixed;
+}
+.text {
+    font-family: $font-family;
+    font-weight:700;
+    font-size:20px;
+    color:white;
+}
