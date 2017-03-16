@@ -64,7 +64,6 @@ $(document).ready(function(){
                     cls="cl";
                 }
                 $('.'+cls).html("("+val+"%)");
-                console.log(val);
                 if(val > 0.0){
                     $('.'+cls).addClass('green');
                     console.log(cls);
@@ -88,6 +87,7 @@ $(document).ready(function(){
             $('.volume').html(stock["5. volume"]+$('.volume').html());
         }
     }
-    $.getJSON("http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol="+ticker+"&interval=60min&apikey=1977", wrapper(interval));
+   $.getJSON("http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol="+ticker+"&interval=60min&apikey=1977", wrapper(interval));
+
     $('[data-toggle="tooltip"]').tooltip(); 
 });
