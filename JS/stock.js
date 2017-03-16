@@ -50,7 +50,7 @@ $(document).ready(function(){
          return function(data) {
             var date=data["Meta Data"]["3. Last Refreshed"];
             var stock=data["Time Series ("+ interval.toString() +"min)"][date.toString()];
-            var comp=moment().set({'hours': 16 ,'minutes':0,'seconds': 0});
+            var comp=moment(date).set({'hours': 16 ,'minutes':0,'seconds': 0});
             comp=moment(comp).subtract(1,'days');            
             comp=form(comp);
             $('.data').removeClass('green');
