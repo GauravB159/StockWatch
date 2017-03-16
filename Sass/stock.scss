@@ -47,12 +47,6 @@
 .second{
     margin-left:-2px;
 }
-.date{
-    font-size:24px;
-    margin:0;
-    margin-left:-20px;
-    background-color:transparent;
-}
 .glyphicon-chevron-up{
     font-size:20px;
 }
@@ -77,7 +71,14 @@ td{
 }
 .data{
     font-family:$font-family;
-    font-weight:400;
+    font-weight:700;
+    font-size:37px;
+}
+.date{
+    font-size:24px;
+    margin:0;
+    margin-left:-20px;
+    background-color:transparent;
 }
 .red{
     color: red;
