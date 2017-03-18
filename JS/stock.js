@@ -87,7 +87,7 @@ $(document).ready(function(){
             $('.volume').html(stock["5. volume"]+$('.volume').html());
         }
     }
-   $.getJSON("http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol="+ticker+"&interval=60min&apikey=1977", wrapper(interval));
+   $.getJSON("../JS/test.json", wrapper(interval));
 
     $('[data-toggle="tooltip"]').tooltip(); 
 });
