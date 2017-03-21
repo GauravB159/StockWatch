@@ -4,9 +4,8 @@ var port = process.env.PORT || 80;
 
 app.use(express.static(__dirname ));
 
-app.get("/stock.html",function(req,res){
-    res.send("stock.html");
-    alert("Stock page");
+app.get('/stock.html', function(req, res){
+    res.sendfile('stock.html', { root: __dirname} );
 });
 app.listen(port, function() {
   console.log("Listening on " + port);
