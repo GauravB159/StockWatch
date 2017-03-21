@@ -32,6 +32,11 @@ $(document).ready(function(){
         var interval= $(this).html();
         $(".data").html("");
         $(".ticker").html(ticker);
+        $.ajax({
+            url: '/time',
+            data: interval,
+            type: 'POST',
+        });
         $.getJSON("http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol="+ticker+"&interval="+interval+"min&apikey=1977", wrapper(interval));
     });
     
