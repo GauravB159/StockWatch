@@ -34,10 +34,16 @@ $(document).ready(function(){
         $(".ticker").html(ticker);
         $.ajax({
             url: '/time',
-            data: interval,
-            type: 'POST',
-        });
-        $.getJSON("../test.json", wrapper(interval));
+            type: 'post',
+            dataType: 'json',
+            data: {name: interval},
+            contentType: 'application/json',
+            success: function(data){
+               alert("success");
+               alert(data);
+        }
+});
+        //$.getJSON("../test.json", wrapper(interval));
     });
     
     var form=function(date){
