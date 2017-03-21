@@ -32,16 +32,7 @@ $(document).ready(function(){
         var interval= $(this).html();
         $(".data").html("");
         $(".ticker").html(ticker);
-        $.ajax({
-            url: '/time',
-            type: 'post',
-            dataType: 'json',
-            data: {name: interval},
-            contentType: 'application/json',
-            success: function(data){
-               alert("success");
-               alert(data);
-        }
+        $.post('/time',{'name': interval});
 });
         //$.getJSON("../test.json", wrapper(interval));
     });
