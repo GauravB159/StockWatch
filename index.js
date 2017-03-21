@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname ));
 
 app.post('/stock', function(req, res){
-    var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+res.body.ticker+'&interval=60min&apikey=1977';
+    var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+req.body.ticker+'&interval=60min&apikey=1977';
     res.sendfile('stock.html', { root: __dirname} );
     http.get(url, function(res){
         var body = '';
