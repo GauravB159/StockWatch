@@ -11,9 +11,10 @@ app.use(bodyParser.json());
 
 
 app.use(express.static(__dirname ));
-app.post('/time',function(req, res){
-console.log("HELLO");
-    var body=req.body;
+app.post('/time',function(req, res){ 
+  var body = req.body;
+  console.log(body)
+  res.send(body)
 });
 app.post('/stock', function(req, res){
     var ticker=req.body.ticker;
