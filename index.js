@@ -7,7 +7,7 @@ var fs = require('fs');
 
 var port = process.env.PORT || 80;
 app.use(bodyParser.urlencoded({ extended: true })); 
-var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=30min&apikey=1977';
+var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=60min&apikey=1977';
 
 app.use(express.static(__dirname ));
 
