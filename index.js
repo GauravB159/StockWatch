@@ -58,7 +58,12 @@ var wrapper =function(interval){
 app.use(express.static(__dirname ));
 
 app.post('/stock', function(req, res){
-    $.getJSON("http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=GOOG&interval=60min&apikey=1977", wrapper(60));
+        $.ajax({
+            type: "GET",
+            url: "http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=GOOG&interval=60min&apikey=1977",
+        });
+    
+    //$.getJSON("http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=GOOG&interval=60min&apikey=1977", wrapper(60));
     res.sendfile('stock.html', { root: __dirname} );
 });
 app.listen(port, function() {
