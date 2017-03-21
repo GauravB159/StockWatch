@@ -5,7 +5,7 @@ var port = process.env.PORT || 80;
 app.use(express.static(__dirname ));
 
 app.get('/', function(req, res){
-    res.sendfile('currency.html', { root: __dirname } );
+    res.sendfile('index.html', { root: __dirname } );
 });
 
 app.listen(port, function() {
