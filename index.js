@@ -12,8 +12,8 @@ app.use(bodyParser.json());
 
 app.use(express.static(__dirname ));
 app.post('/time',function(req, res){
+console.log("HELLO");
     var body=req.body;
-    alert(body);
 });
 app.post('/stock', function(req, res){
     var ticker=req.body.ticker;
