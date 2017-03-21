@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname ));
 app.post('/time',function(req, res){
     var body=req.body;
-    console.log(body);
+    alert(body);
 });
 app.post('/stock', function(req, res){
     var ticker=req.body.ticker;
