@@ -32,7 +32,7 @@ $(document).ready(function(){
         var interval= $(this).html();
         $(".data").html("");
         $(".ticker").html(ticker);
-        $.post('/time',{'name': interval});
+        $.post('/time', {number:2});
         //$.getJSON("../test.json", wrapper(interval));
     });
     
