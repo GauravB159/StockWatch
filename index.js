@@ -7,6 +7,7 @@ var fs = require('fs');
 
 var port = process.env.PORT || 80;
 app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.json());
 
 
 app.use(express.static(__dirname ));
