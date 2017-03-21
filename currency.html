@@ -7,8 +7,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="CSS/index.css">
-  <script src="JS/index.js"></script>
+  <link rel="stylesheet" href="CSS/currency.css">
+  <script src="JS/currency.js"></script>
+  <script src="Resources/money.js"></script>
 </head>
 <body>
 <nav class="navbar nav navbar-inverse navbar-fixed-top text" id="result">
@@ -27,7 +28,7 @@
           <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="See which stocks are going up!"><span class="glyphicon glyphicon-chevron-up"></span> Up</a></li>
           <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="See which stocks are going down!"><span class="glyphicon glyphicon-chevron-down"></span> Down</a></li>
         </ul>
-        <form class="navbar-form navbar-left" method="GET" action="stock.html">
+        <form class="navbar-form navbar-left" method="GET" action="stock.html" >
           <div class="input-group">
             <input type="text" class="form-control formers" name="ticker" placeholder="Search a Stock eg. GOOG">
             <div class="input-group-btn">
@@ -40,64 +41,63 @@
     </div>
   </div>
 </nav>
-
 <div class="container-fluid">
-    <div class="row r1">
-        <div class="col-sm-6">
-            <form class="login" method="POST" action="#">
-                <label class="text heading"> Login: </label>
-                <div class="form-group">
-                    <label for="email" class="text2">Email: </label>
-                    <input type="text" class="form-control former" name="email">
-                </div>
-                <div class="form-group">
-                    <label for="password" class="text2">Password: </label>
-                    <input type="password" class="form-control former" name="password">
-                </div>
-                <div class="form-group">
-                    <div class="btn-group" data-toggle="buttons">
-                        <label class="btn bttn btn-rmr bcl">
-                            <input type="checkbox" name="options" id="option1"> <span class="rmr">Remember Me</span><span class="rmrd">Remembered</span>
-                        </label>
-                    </div>
-                </div>
-                 
-                <div class="btn-toolbar">
-                    <button type="submit" name="submit-login" class="btn btn-default bttn green">
-                        <b>Login</b>
-                    </button>
-                     
-                    <button type="button" class="btn btn-default bttn red"><b>Click to Register</b></button>
-                </div>
-            </form>
-            <form class="register" method="POST" action="#">
-                <label class="text heading"> Register: </label>
-                <div class="form-group">
-                    <label for="email" class="text2">Email: </label>
-                    <input type="text" class="form-control former" name="email">
-                </div>
-                <div class="form-group">
-                    <label for="password" class="text2">Password: </label>
-                    <input type="password" class="form-control former" name="password">
-                </div>
-                <div class="form-group">
-                    <label for="password" class="text2">Confirm Password: </label>
-                    <input type="password" class="form-control former" name="password">
-                </div>
-                <div class="btn-toolbar">
-                    <button type="submit" name="submit-login" class="btn btn-default bttn green">
-                        <b>Register</b>
-                    </button>
-                     
-                    <button type="button" class="btn btn-default bttn red"><b>Click to Login</b></button>
-                </div>
-            </form>
-        </div>
-        <div class="col-sm-6 desc">
-            <div class="well well-black">
-                <!--<img src="../img/stock.jpg" class="img-responsive" id="stockimg"/>-->
-                <div class="text-center text txt">Welcome to StockWatch where you can track your stocks, buy and sell stocks all at the click of a button. Just sign up or login on the left and you're good to go.</div>
-            </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="text fixed">
+                  <tr>
+                    <td colspan=2><span>Enter value </span></td>
+                    <td colspan=2><input type="text" name="to" class="frm"></td>
+                    <td colspan=2 class="green conv">Convert </td>
+                    <td colspan=2 class="answer"></td>
+                  </tr> 
+                  <tr>
+                    <td colspan=2 class="from o9"><div  data-toggle="tooltip" data-placement="right" title="Double click 'To' or 'From' to exchange the currencies. Click 'To' or 'From' and then a currency to add it to their respective box" > From</div> </td>
+                    <td colspan=2 class="from2 check"></td>
+                    <td colspan=2 class="to">To </td>
+                    <td colspan=2 class="to2" style="border-top: 3px solid black"></td>
+                  </tr> 
+                  <tr>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Australia">AUD</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Bulgaria">BGN</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Brazil">BRL</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Canada">CAD</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Switzerland">CHF</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="China">CNY</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Czech Republic">CZK</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Denmark">DKK</div></td>
+                  </tr>
+                  <tr>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Europe">EUR</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Great Britain">GBP</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Hong Kong">HKD</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Croatia">HRK</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Hungary">HUF</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Indonesia">IDR</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Israel">ILS</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="India">INR</div></td>
+                  </tr>
+                  <tr>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Japan">JPY</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="South Korea">KRW</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Mexico">MXN</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Malaysian">MYR</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Norway">NOK</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="New Zealand">NZD</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Philippines">PHP</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Poland">PLN</div></td>
+                  </tr>
+                  <tr>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Romania">RON</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Russia">RUB</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Sweden">SEK</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Singapore">SGD</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Thailand">THB</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="Turkey">TRY</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="USA">USD</div></td>
+                    <td class="val"><div class="child" data-toggle="tooltip" data-placement="bottom" title="South Africa">ZAR</div></td>
+                  </tr>
+            </table>
         </div>
     </div>
 </div>
