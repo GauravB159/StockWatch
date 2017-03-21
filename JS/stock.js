@@ -49,7 +49,7 @@ $(document).ready(function(){
     var wrapper =function(interval){
          return function(data) {
             var date=data["Meta Data"]["3. Last Refreshed"];
-            console.log(date);
+            console.log(data);
             var stock=data["Time Series ("+ interval.toString() +"min)"][date.toString()];
             var comp=moment(date).set({'hours': 16 ,'minutes':0,'seconds': 0});
             comp=moment(comp).subtract(1,'days');  
@@ -97,7 +97,6 @@ $(document).ready(function(){
             $('.volume').html(stock["5. volume"]+$('.volume').html());
         }
     }
-   $.getJSON("http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol="+ticker+"&interval=60min&apikey=1977", wrapper(interval));
-
+    $.getJSON("../test.json", wrapper(interval));
     $('[data-toggle="tooltip"]').tooltip(); 
 });
