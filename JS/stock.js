@@ -32,7 +32,17 @@ $(document).ready(function(){
         var interval= $(this).html();
         $(".data").html("");
         $(".ticker").html(ticker);
-        $.post('/time', {number:2});
+        $.ajax({
+              type: "POST",
+              url: "/time",
+              data: "name=John&location=Boston",
+              success: function(msg){
+                    alert( "Data Saved: " + msg );
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) {
+                 alert("some error");
+              }
+        });
         //$.getJSON("../test.json", wrapper(interval));
     });
     
