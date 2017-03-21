@@ -33,7 +33,6 @@ $(document).ready(function(){
         $(".data").html("");
         $(".ticker").html(ticker);
         $.post('/time',{'name': interval});
-});
         //$.getJSON("../test.json", wrapper(interval));
     });
     
