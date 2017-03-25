@@ -60,6 +60,19 @@ body {
     background-color: rgba(0, 0, 0, 0.8);
     min-width: 100px; }
 
+.converter, .glyphicon-usd {
+  color: green !important; }
+
+.glyphicon-usd {
+  margin-right: 2px;
+  font-weight: bold; }
+
+.glyphicon-user {
+  margin-right: 4px; }
+
+.logout, .glyphicon-log-out {
+  color: red !important; }
+
 .former, .formers {
   border-radius: 0;
   color: white;

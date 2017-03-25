@@ -32,7 +32,9 @@ app.post('/stock', function(req, res){
     ticker=req.body.ticker;
     res.sendFile('stock.html', { root: __dirname} );
 });
-
+app.get('/currency', function(req, res){
+    res.sendFile('currency.html', { root: __dirname} );
+});
 app.get('/ticker',function(req,res){
     res.send(ticker);
 });
