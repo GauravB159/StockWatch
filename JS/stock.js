@@ -4,8 +4,6 @@ $(document).ready(function(){
     }, function(){
         $(this).removeClass('o3');
     });
-    let params =location.toString();
-    var num=params.indexOf('?') + 8;
     var ticker="GOOG";   
     var interval="60";
     $.get('/ticker',function(data){
@@ -24,66 +22,67 @@ $(document).ready(function(){
     }
     var wrapper =function(interval,caller){
          return function(data) {
-            if(data == undefined){
-                counter+=1;
-                setInterval(60,function(){$(caller).click();});
-            }else{
-                var intCheck=data["Meta Data"]["4. Interval"];  
-                var symbol=data["Meta Data"]["2. Symbol"];    
-                var inter=interval+"min";
-                if(intCheck != inter || symbol != ticker){
+            $.getJSON("../daily.json",function(daily){
+                if(data == undefined){
                     counter+=1;
                     $(caller).click();
                 }else{
-                    console.log(data);
-                    var date=data["Meta Data"]["3. Last Refreshed"];
-                                        console.log(data);
-                    counter=0;
-                    var stock=data["Time Series ("+ interval.toString() +"min)"][date.toString()];
-                    var comp=moment(date).set({'hours': 16 ,'minutes':0,'seconds': 0});
-                    comp=moment(comp).subtract(1,'days');  
-                    while(true){
-                        comp=form(comp);
-                        if(data["Time Series ("+ interval.toString() +"min)"][comp.toString()] == undefined){
-                            comp=moment(comp).subtract(1,'days');  
-                        }else{
-                            break;
-                        }
-                    }          
-                    comp=form(comp);
-                    $('.data').removeClass('green');
-                    $('.data').removeClass('red');            
-                    var stock2=data["Time Series ("+ interval.toString() +"min)"][comp.toString()];
-                    for(var property in stock2){
-                        var curr=setUpOrDown(stock,stock2,property);
-                        var cls=property.slice(3,property.length);
-                        var val=(100.0*curr).toFixed(2);
-                        if(cls=="close"){
-                            cls="cl";
-                        }
-                        $('.'+cls).html("("+val+"%)");
-                        if(val > 0.0){
-                            $('.'+cls).addClass('green');
-                            if(cls=="cl"){
-                                $('.ticker').html($('.ticker').html()+" <span class='green'><span class='glyphicon glyphicon-chevron-up'></span>"+"("+val+"%)"+"</span>");       
+                    var intCheck=data["Meta Data"]["4. Interval"];  
+                    var symbol=data["Meta Data"]["2. Symbol"];    
+                    var inter=interval+"min";
+                    if(intCheck != inter || symbol != ticker){
+                        counter+=1;
+                        $(caller).click();
+                    }else{
+                        var date=data["Meta Data"]["3. Last Refreshed"];
+                        counter=0;
+                        var stock=data["Time Series ("+ interval.toString() +"min)"][date.toString()];
+                        var comp=moment(date);
+                        comp=form(comp,'YYYY-MM-DD');
+                        comp=moment(comp).subtract(1,'days');  
+                        while(true){
+                            comp=form(comp,'YYYY-MM-DD');
+                            if(daily["Time Series (Daily)"][comp.toString()] == undefined){
+                                comp=moment(comp).subtract(1,'days');  
+                            }else{
+                                break;
                             }
-                        }else{
-                            $('.'+cls).addClass('red');
-                            if(cls=="cl"){
-                                $('.ticker').html($('.ticker').html()+" <span class='red'><span class='glyphicon glyphicon-chevron-down'></span>"+"("+val+"%)"+"</span>");    
-                            }                       
+                        }          
+                        comp=form(comp,'YYYY-MM-DD');
+                        $('.data').removeClass('green');
+                        $('.data').removeClass('red');            
+                        var stock2=daily["Time Series (Daily)"][comp.toString()];
+                        for(var property in stock2){
+                            var curr=setUpOrDown(stock,stock2,property);
+                            var cls=property.slice(3,property.length);
+                            var val=(100.0*curr).toFixed(2);
+                            if(cls=="close"){
+                                cls="cl";
+                            }
+                            $('.'+cls).html("("+val+"%)");
+                            if(val > 0.0){
+                                $('.'+cls).addClass('green');
+                                if(cls=="cl"){
+                                    $('.ticker').html($('.ticker').html()+" <span class='green'><span class='glyphicon glyphicon-chevron-up'></span>"+"("+val+"%)"+"</span>");       
+                                }
+                            }else{
+                                $('.'+cls).addClass('red');
+                                if(cls=="cl"){
+                                    $('.ticker').html($('.ticker').html()+" <span class='red'><span class='glyphicon glyphicon-chevron-down'></span>"+"("+val+"%)"+"</span>");    
+                                }                       
+                            }
                         }
+                        date=moment(date).add(570, 'minutes');
+                        date=form(date,'YYYY-MM-DD HH:mm:ss');
+                        $('.date').html(date.toString() + " IST");
+                        $('.open').html(stock["1. open"]+$('.open').html());
+                        $('.high').html(stock["2. high"]+$('.high').html());
+                        $('.low').html(stock["3. low"]+$('.low').html());
+                        $('.cl').html(stock["4. close"]+$('.cl').html());
+                        $('.volume').html(stock["5. volume"]+$('.volume').html());
                     }
-                    date=moment(date).add(570, 'minutes');
-                    date=form(date);
-                    $('.date').html(date.toString() + " IST");
-                    $('.open').html(stock["1. open"]+$('.open').html());
-                    $('.high').html(stock["2. high"]+$('.high').html());
-                    $('.low').html(stock["3. low"]+$('.low').html());
-                    $('.cl').html(stock["4. close"]+$('.cl').html());
-                    $('.volume').html(stock["5. volume"]+$('.volume').html());
                 }
-            }
+            });
         }
     }
     var counter=0;
@@ -96,11 +95,13 @@ $(document).ready(function(){
         if(counter == 0){
             $.post('/time', {number:interval});
         }
-        $.getJSON("../test.json", wrapper(interval,this));
+        $.getJSON("../interval.json", wrapper(interval,this));
+        
     });
+    'YYYY-MM-DD HH:mm:ss'
         $('.sixty').click();
-    var form=function(date){
-        var formDate=moment(date).format('YYYY-MM-DD HH:mm:ss');
+    var form=function(date,dformat){
+        var formDate=moment(date).format(dformat);
         return formDate;
     }
     

@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 var interval=60;
-function writeStock(res,url){
+function writeStock(url,name){
 http.get(url, function(res){
         var body = '';
         res.on('data', function(chunk){
@@ -18,7 +18,7 @@ http.get(url, function(res){
     });
     res.on('end', function(){
         var tJson = JSON.parse(body);
-        fs.writeFileSync('test.json', JSON.stringify(tJson));
+        fs.writeFile(name+'.json', JSON.stringify(tJson));
     });
 
     }).on('error', function(e){
@@ -41,11 +41,13 @@ app.post('/time',function(req, res){
       var body = req.body;
       interval=body.number;
       var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval='+interval+'min&apikey=1977';
-            console.log(url);
-      writeStock(res,url)
+      console.log(url);
+      writeStock(url,"interval");
+      var url2='http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
+      writeStock(url2,"daily");      
 setTimeout(function() {
       res.send("OK");
-    }, 150);
+    }, 15000);
 
 });
 
