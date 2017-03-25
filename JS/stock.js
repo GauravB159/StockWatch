@@ -26,7 +26,7 @@ $(document).ready(function(){
          return function(data) {
             if(data == undefined){
                 counter+=1;
-                $(caller).click();
+                setInterval(60,function(){$(caller).click();});
             }else{
                 var intCheck=data["Meta Data"]["4. Interval"];  
                 var symbol=data["Meta Data"]["2. Symbol"];    
@@ -35,7 +35,9 @@ $(document).ready(function(){
                     counter+=1;
                     $(caller).click();
                 }else{
+                    console.log(data);
                     var date=data["Meta Data"]["3. Last Refreshed"];
+                                        console.log(data);
                     counter=0;
                     var stock=data["Time Series ("+ interval.toString() +"min)"][date.toString()];
                     var comp=moment(date).set({'hours': 16 ,'minutes':0,'seconds': 0});

@@ -27,13 +27,16 @@ http.get(url, function(res){
 }
 app.use(express.static(__dirname ));
 var ticker=0;
+
 app.post('/stock', function(req, res){
     ticker=req.body.ticker;
     res.sendFile('stock.html', { root: __dirname} );
 });
+
 app.get('/ticker',function(req,res){
     res.send(ticker);
 });
+
 app.post('/time',function(req, res){ 
       var body = req.body;
       interval=body.number;
@@ -42,7 +45,7 @@ app.post('/time',function(req, res){
       writeStock(res,url)
 setTimeout(function() {
       res.send("OK");
-    }, 15000);
+    }, 150);
 
 });
 
