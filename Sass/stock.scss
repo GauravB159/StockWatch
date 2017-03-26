@@ -127,9 +127,12 @@ td{
         width:90px;
         font-size:16px;
         font-family:$font-family;
+        font-weight:700;
+    }
+    th{
+        color:black;
     }
 }
-
 .c3-axis-y text,.c3-axis-x text {
    fill: white;
    font-size:16px;

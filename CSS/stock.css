@@ -212,7 +212,10 @@ td {
   .c3-tooltip td, .c3-tooltip th {
     width: 90px;
     font-size: 16px;
-    font-family: "Montserrat", sans-serif; }
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700; }
+  .c3-tooltip th {
+    color: black; }
 
 .c3-axis-y text, .c3-axis-x text {
   fill: white;
