@@ -18,7 +18,7 @@ http.get(url, function(res){
     });
     res.on('end', function(){
         var tJson = JSON.parse(body);
-        fs.writeFile(name+'.json', JSON.stringify(tJson));
+        fs.writeFileSync(name+'.json', JSON.stringify(tJson));
     });
 
     }).on('error', function(e){
@@ -32,6 +32,9 @@ app.post('/stock', function(req, res){
     ticker=req.body.ticker;
     res.sendFile('stock.html', { root: __dirname} );
 });
+app.get('/chart', function(req, res){
+    res.sendFile('chart.html', { root: __dirname} );
+});
 app.get('/currency', function(req, res){
     res.sendFile('currency.html', { root: __dirname} );
 });
@@ -43,14 +46,10 @@ app.post('/time',function(req, res){
       var body = req.body;
       interval=body.number;
       var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval='+interval+'min&apikey=1977';
-      console.log(url);
-      writeStock(url,"interval");
-      var url2='http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
-      writeStock(url2,"daily");      
-setTimeout(function() {
+      var url2 = 'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
+      writeStock(url,"interval");  
+      writeStock(url2,"daily");    
       res.send("OK");
-    }, 15000);
-
 });
 
 app.listen(port, function() {

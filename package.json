@@ -22,6 +22,7 @@
     "express": "^4.15.2",
     "http-delayed-response": "0.0.4",
     "jquery": "^3.2.1",
+    "jsonfile": "^2.4.0",
     "mongodb": "^2.2.25",
     "mongoose": "^4.9.1",
     "nodemailer": "^3.1.8"

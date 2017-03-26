@@ -101,23 +101,34 @@ body {
   padding-top: 17.5px;
   padding-bottom: 18px; }
 
-.ticker, .ib, .ibcl {
-  font-size: 35px;
-  margin-top: 100px;
+.ticker, .ib, .ic, .id, .ibcl {
+  font-size: 30px;
+  margin-top: 80px;
   margin-left: 20px;
-  margin-right: 50px;
+  margin-right: 30px;
   background-color: rgba(0, 0, 0, 0.9);
   width: fit-content;
   padding: 0 20px;
+  padding-bottom: 2px;
   display: inline-block; }
 
-.ib, .ibcl {
+.ib, .ic, .id, .ibcl {
   margin-left: 0;
   margin-right: 0;
+  font-size: 30px;
   background-color: rgba(0, 0, 0, 0.7);
   border-top: 3px solid black;
-  border-right: 3px solid black;
-  height: 53px; }
+  border-right: 3px solid black; }
+
+.ic, .id {
+  float: right;
+  margin-right: 34px;
+  font-size: 30px;
+  cursor: pointer; }
+
+.id {
+  margin-right: 0;
+  border-left: 3px solid black; }
 
 .ibcl {
   cursor: pointer;
@@ -173,5 +184,39 @@ td {
 
 .green {
   color: green; }
+
+.hidden {
+  display: none; }
+
+.ch {
+  height: 505px;
+  width: 106.6%;
+  margin-left: 35px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 3px solid black; }
+
+.c3-legend-item {
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  fill: white; }
+
+.c3-legend-item-tile {
+  height: 12px;
+  width: 12px; }
+
+.char {
+  width: 90%; }
+
+.c3-tooltip {
+  height: 10%; }
+  .c3-tooltip td, .c3-tooltip th {
+    width: 90px;
+    font-size: 16px;
+    font-family: "Montserrat", sans-serif; }
+
+.c3-axis-y text, .c3-axis-x text {
+  fill: white;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif; }
 
 /*# sourceMappingURL=stock.css.map */

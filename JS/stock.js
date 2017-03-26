@@ -28,9 +28,10 @@ $(document).ready(function(){
                     $(caller).click();
                 }else{
                     var intCheck=data["Meta Data"]["4. Interval"];  
-                    var symbol=data["Meta Data"]["2. Symbol"];    
+                    var symbol=data["Meta Data"]["2. Symbol"]; 
+                    var sym2=daily["Meta Data"]["2. Symbol"]; 
                     var inter=interval+"min";
-                    if(intCheck != inter || symbol != ticker){
+                    if(intCheck != inter || symbol != ticker || symbol != sym2){
                         counter+=1;
                         $(caller).click();
                     }else{
@@ -96,7 +97,9 @@ $(document).ready(function(){
             $.post('/time', {number:interval});
         }
         $.getJSON("../interval.json", wrapper(interval,this));
-        
+        if(counter==0 && $(this).hasClass("checker")){
+            $('.graph').click();
+        }
     });
     'YYYY-MM-DD HH:mm:ss'
         $('.sixty').click();
@@ -110,7 +113,5 @@ $(document).ready(function(){
         var prev=parseFloat(two[arg]);
         return (curr-prev)/prev;
     }
-    
-    
     $('[data-toggle="tooltip"]').tooltip(); 
 });
