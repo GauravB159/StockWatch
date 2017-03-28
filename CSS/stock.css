@@ -101,7 +101,7 @@ body {
   padding-top: 17.5px;
   padding-bottom: 18px; }
 
-.ticker, .ib, .ic, .id, .ibcl {
+.ticker, .ib, .ic, .id, .ibcl, .ibcd {
   font-size: 30px;
   margin-top: 80px;
   margin-left: 20px;
@@ -112,18 +112,19 @@ body {
   padding-bottom: 2px;
   display: inline-block; }
 
-.ib, .ic, .id, .ibcl {
+.ib, .ic, .id, .ibcl, .ibcd {
   margin-left: 0;
   margin-right: 0;
-  font-size: 30px;
+  font-size: 20px;
   background-color: rgba(0, 0, 0, 0.7);
   border-top: 3px solid black;
-  border-right: 3px solid black; }
+  border-right: 3px solid black;
+  padding-top: 10px;
+  padding-bottom: 6px; }
 
 .ic, .id {
   float: right;
   margin-right: 34px;
-  font-size: 30px;
   cursor: pointer; }
 
 .id {
@@ -133,6 +134,13 @@ body {
 .ibcl {
   cursor: pointer;
   margin-left: -5px; }
+
+.ibcd {
+  cursor: pointer;
+  margin-left: -5px;
+  font-size: 20px;
+  padding-top: 10px;
+  padding-bottom: 6px; }
 
 .acti {
   background-color: rgba(0, 0, 0, 0.9); }
@@ -165,13 +173,13 @@ table {
 td {
   border: 2px solid rgba(0, 0, 0, 0.7);
   text-align: center;
-  font-size: 40px;
+  font-size: 32px;
   width: 25%; }
 
 .data {
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  font-size: 37px; }
+  font-size: 33px; }
 
 .date {
   font-size: 24px;

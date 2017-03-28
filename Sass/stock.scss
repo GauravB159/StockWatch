@@ -23,16 +23,17 @@
     @extend .ticker;
     margin-left:0;
     margin-right:0;    
-    font-size:30px;
+    font-size:20px;
     background-color:rgba(0,0,0,0.7); 
     border-top:3px solid black;  
-    border-right:3px solid black;    
+    border-right:3px solid black;  
+    padding-top:10px;
+    padding-bottom:6px;  
 }
 .ic{
     @extend .ib;
     float:right;
     margin-right:34px;
-    font-size:30px;
     cursor:pointer;
 }
 .id{
@@ -44,6 +45,14 @@
     @extend .ib;
     cursor:pointer;
     margin-left:-5px;
+}
+.ibcd{
+    @extend .ib;
+    cursor:pointer;
+    margin-left:-5px;
+    font-size:20px;
+    padding-top:10px;
+    padding-bottom:6px;
 }
 .acti{
     background-color:rgba(0,0,0,0.9);
@@ -78,13 +87,13 @@ table{
 td{
     border: 2px solid rgba(0,0,0,0.7);
     text-align:center;
-    font-size: 40px;
+    font-size: 32px;
     width:25%;
 }
 .data{
     font-family:$font-family;
     font-weight:700;
-    font-size:37px;
+    font-size:33px;
 }
 .date{
     font-size:24px;

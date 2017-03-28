@@ -47,8 +47,12 @@ app.post('/time',function(req, res){
       interval=body.number;
       var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval='+interval+'min&apikey=1977';
       var url2 = 'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
+      var url3 = 'http://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol='+ticker+'&apikey=1977';
+      var url4 = 'http://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol='+ticker+'&apikey=1977';
       writeStock(url,"interval");  
-      writeStock(url2,"daily");    
+      writeStock(url2,"daily");
+      writeStock(url3,"weekly");    
+      writeStock(url4,"monthly");        
       res.send("OK");
 });
 

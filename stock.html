@@ -48,6 +48,9 @@
 <div class="container-fluid">
     <div class="ticker text"></div>
     <div class="text ib" style="border-left:3px solid black" data-toggle="tooltip" data-placement="bottom" title="Unit: Minutes. Smaller intervals take more time to load!">Refresh Rate: </div>
+    <div class="text ib hidden sh ibcd monthly">Monthly</div>
+    <div class="text ib hidden sh ibcd weekly">Weekly</div>
+    <div class="text ib hidden sh ibcd daily">Daily</div>    
     <div class="text ib ibcl acti sixty">60</div>
     <div class="text ib ibcl">30</div>
     <div class="text ib ibcl">15</div>
@@ -96,71 +99,117 @@
 </div>
 </div>
 <script>
+    var lastmin;
+    var chart=function(data,today,checker){
+                var col1=[];
+                for(var i=0;i<5;i++){
+                    col1[i]=[];
+                }
+                var format="";
+                var yform="";
+                if(checker == true){
+                    format='%Y-%m-%d %H:%M:%S';
+                    yform='%H:%M';
+                }else{
+                    format='%Y-%m-%d';
+                    yform='%Y-%m-%d';
+                }
+                for(var val in data){
+                    var hold=val;
+                    if(checker == true){
+                        var comp=val[8]+val[9];
+                        if(comp != today){
+                            break;
+                        }
+                    }else{
+                        hold=moment(val).format("YYYY-MM-DD");
+                    }
+                    col1[0].push(hold);
+                    col1[1].push(data[val]["1. open"]);
+                    col1[2].push(data[val]["2. high"]);
+                    col1[3].push(data[val]["3. low"]);
+                    col1[4].push(data[val]["4. close"]);
+                }
+                var chart = c3.generate({
+                bindto: '#chart',
+                padding: {
+                    right: 20,
+                    left:80,
+                    top:5
+                },
+                data: {
+                      x: 'date',
+                      xFormat: format,
+                      json: {
+                            date: col1[0],
+                            Open: col1[1],
+                            Close: col1[4],
+                            High: col1[2],
+                            Low: col1[3]
+                     }
+                },
+                axis : {
+                        x : {
+                            type : 'timeseries',
+                            label: "Time",
+                            tick : {
+                                format : yform
+                        }
+                    },
+                        y: {
+                            label: "Value",
+                            tick: {
+                                format: d3.format('.2f')
+                            }
+                        }
+                    }
+                });
+            }
+    var graphGen=function(val,checker){
+            $.getJSON(val+".json",function(data){
+                var interval=$('.acti').html();
+                var today=data["Meta Data"]["3. Last Refreshed"];
+                if(checker == true){
+                    var check=moment().tz("America/Toronto").format('DD');
+                    today=today[8]+today[9];
+                    if(check != today){
+                        return;
+                    }
+                    data=data["Time Series ("+interval+"min)"];
+                }else{
+                    if(interval == "Daily"){
+                        data=data["Time Series ("+interval+")"];
+                    }else{
+                        data=data[interval+" Time Series"];
+                    }
+                }
+                chart(data,today,checker);
+            }); 
+        }
     $(".graph").click(function(){
-        $.getJSON("interval.json",function(data){
-        console.log(data);
-        var interval=$('.acti').html();
-        console.log(interval);
-        var today=data["Meta Data"]["3. Last Refreshed"];
-        today=today[8]+today[9];
-        console.log(today);
-        data=data["Time Series ("+interval+"min)"];
-        var col1=[];
-        for(var i=0;i<5;i++){
-            col1[i]=[];
+        graphGen("interval",true);
+        $('.graph').css("border-left","3px solid black");
+        $('.bod').toggleClass("hidden");
+        $('.sh').toggleClass("hidden");
+        $('.watch').toggleClass("hidden");
+        $('.buy').toggleClass("hidden");    
+        $('.char').toggleClass("hidden");
+        if($('.ibcl').hasClass("checker") && !(lastmin.hasClass("acti"))){
+            $('.ib').removeClass("acti");
+            lastmin.addClass("acti");
         }
-        for(var val in data){
-            var comp=val[8]+val[9];
-            if(comp != today){
-                break;
-            }
-            col1[0].push(val);
-            col1[1].push(data[val]["1. open"]);
-            col1[2].push(data[val]["2. high"]);
-            col1[3].push(data[val]["3. low"]);
-            col1[4].push(data[val]["4. close"]);
-        }
-        console.log(col1);
-        var chart = c3.generate({
-        bindto: '#chart',
-        padding: {
-        right: 20,
-        left:70
-        },
-        data: {
-          x: 'date',
-          xFormat: '%Y-%m-%d %H:%M:%S',
-          json: {
-                date: col1[0],
-                Open: col1[1],
-                Close: col1[4],
-                High: col1[2],
-                Low: col1[3]
-            }
-        },
-        axis : {
-            x : {
-                type : 'timeseries',
-                label: "Time",
-                tick : {
-                    format : '%H:%M'
-                }
-            },
-            y: {
-                label: "Value",
-                tick: {
-                    format: d3.format('.2f')
-                }
-            }
+        $('.ibcl').toggleClass("checker");
+    });
+    $(".ibcl").click(function(){
+        lastmin=$(this);
+        if($(this).hasClass("checker")){
+            graphGen("interval",true);
         }
     });
-    }); 
-    $('.bod').toggleClass("hidden");
-    $('.watch').toggleClass("hidden");
-    $('.buy').toggleClass("hidden");    
-    $('.char').toggleClass("hidden");
-    $('.ibcl').toggleClass("checker");
-});
+    $(".sh").click(function(){
+        var str=$(this).html();
+        graphGen(str.toLowerCase(),false);
+    });
 </script>
 </body>
 </html>

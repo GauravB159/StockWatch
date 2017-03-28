@@ -87,21 +87,19 @@ $(document).ready(function(){
         }
     }
     var counter=0;
-    $(".ibcl,.sixty").click(function(){
-        $(".ibcl").removeClass("acti");
+    $(".ib,.sixty").click(function(){   
+        $(".ib").removeClass("acti");
         $(this).addClass("acti");
         var interval= $(this).html();
-        $(".data").html("");
-        $(".ticker").html(ticker);
-        if(counter == 0){
-            $.post('/time', {number:interval});
-        }
-        $.getJSON("../interval.json", wrapper(interval,this));
-        if(counter==0 && $(this).hasClass("checker")){
-            $('.graph').click();
+        if(interval != "Daily" && interval != "Weekly" && interval != "Monthly"){
+            $(".data").html("");
+            $(".ticker").html(ticker);
+            if(counter == 0){
+                $.post('/time', {number:interval});
+            }
+            $.getJSON("../interval.json", wrapper(interval,this));
         }
     });
-    'YYYY-MM-DD HH:mm:ss'
         $('.sixty').click();
     var form=function(date,dformat){
         var formDate=moment(date).format(dformat);
