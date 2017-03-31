@@ -2,9 +2,9 @@ $(document).ready(function(){
 var demo = function(val,frm,too){
         return function(data) {
             data.rates.USD=1;
-            console.log(frm);
             fx.rates = data.rates;
             var rate = fx(val).from(frm).to(too);
+            console.log(rate);
             $('.answer').html(rate.toFixed(2));
         }
     }
@@ -43,7 +43,6 @@ $('.conv').click(function(){
     var num= parseInt($(".frm").val());
     var from=$(".from2").children(".child").html();
     var to=$(".to2").children(".child").html();
-    console.log(to);
     $.getJSON("../currency.json", demo(num,from,to));
 });
     $('[data-toggle="tooltip"]').tooltip().off("click"); 
