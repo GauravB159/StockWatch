@@ -37,6 +37,12 @@ $('.val').click(function(){
     $('td').removeClass("check");    
 });
 
+$(".frmmob").change(function(){
+    $(".frmdesk").val($(this).val());
+});
+$(".frmdesk").change(function(){
+    $(".frmmob").val($(this).val());
+});
 $('.conv').click(function(){
     $('td').removeClass("o9");
     var num= $(".frm").val();
