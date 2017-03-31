@@ -4,7 +4,6 @@ var demo = function(val,frm,too){
             data.rates.USD=1;
             fx.rates = data.rates;
             var rate = fx(val).from(frm).to(too);
-            console.log(val);
             $('.answer').html(rate.toFixed(2));
         }
     }
@@ -41,6 +40,7 @@ $('.val').click(function(){
 $('.conv').click(function(){
     $('td').removeClass("o9");
     var num= parseInt($(".frm").val());
+                console.log(num);
     var from=$(".from2").children(".child").html();
     var to=$(".to2").children(".child").html();
     $.getJSON("../currency.json", demo(num,from,to));
