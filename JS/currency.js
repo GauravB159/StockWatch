@@ -40,9 +40,9 @@ $('.val').click(function(){
 $('.conv').click(function(){
     $('td').removeClass("o9");
     var num= $(".frm").html();
-                console.log(num);
     var from=$(".from2").children(".child").html();
     var to=$(".to2").children(".child").html();
+    console.log(num);    
     $.getJSON("../currency.json", demo(num,from,to));
 });
     $('[data-toggle="tooltip"]').tooltip().off("click"); 
