@@ -4,7 +4,7 @@ var demo = function(val,frm,too){
             data.rates.USD=1;
             fx.rates = data.rates;
             var rate = fx(val).from(frm).to(too);
-            console.log(rate);
+            console.log(val);
             $('.answer').html(rate.toFixed(2));
         }
     }
