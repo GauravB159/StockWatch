@@ -10,16 +10,51 @@
 }
 .ticker{
     font-size:30px;
+    position:relative;
     margin-top:80px;
     margin-left:20px;
     margin-right:30px;
     background-color:rgba(0,0,0,0.9);
     width:fit-content;
-    padding:0 20px;
+    padding-left:20px !important;
+    padding-right:20px !important;    
     padding-bottom:2px;
-    display: inline-block;    
+    display: inline-block; 
 }
-.ib{
+
+.dropdown-toggle{
+    font-family:$font-family;
+    font-weight:700;
+    margin-top:80px;    
+    background-color:rgba(0,0,0,0.9);
+    font-size:25px;
+    outline:none;
+    border:1px solid black;
+    float:right;
+    margin-right:3%;
+    padding-bottom:1px;
+    color:white !important;
+}
+.dropdown-menu{
+    font-family:$font-family;
+    font-weight:700;
+    background-color:rgba(0,0,0,0.6);
+    font-size:25px;
+    outline:none;
+    border:1px solid black;
+    float:right;
+    margin-right:3%;
+    padding-bottom:1px;
+    border-radius:0;
+}
+.dropdown-header{
+    cursor:default;
+}
+.divider{
+    width:90%;
+    margin-left:5% !important;
+}
+.ibdesk{
     @extend .ticker;
     margin-left:0;
     margin-right:0;    
@@ -30,24 +65,28 @@
     padding-top:10px;
     padding-bottom:6px;  
 }
-.ic{
-    @extend .ib;
+.ibmob{
+    margin-left:4%;
+    cursor:pointer;
+}
+.icdesk{
+    @extend .ibdesk;
     float:right;
     margin-right:34px;
     cursor:pointer;
 }
-.id{
-    @extend .ic;
+.iddesk{
+    @extend .icdesk;
     margin-right:0;
     border-left:3px solid black;    
 }
-.ibcl{
-    @extend .ib;
+.ibcldesk{
+    @extend .ibdesk;
     cursor:pointer;
     margin-left:-5px;
 }
-.ibcd{
-    @extend .ib;
+.ibcddesk{
+    @extend .ibdesk;
     cursor:pointer;
     margin-left:-5px;
     font-size:20px;
@@ -76,12 +115,12 @@
     color:green;
     font-family:$font-family;
     font-size:20px;
-    
 }
-table{
+.table-condensed{
     box-sizing:border-box;
     width:100%;
     height:500px;
+    table-layout:fixed;
 }
 
 td{
@@ -109,6 +148,9 @@ td{
 }
 .hidden{
     display:none;
+}
+.list-inline{
+    margin:0;
 }
 .ch{
     height:505px;
@@ -146,4 +188,27 @@ td{
    fill: white;
    font-size:16px;
    font-family:$font-family;
+}
+.mob{
+    display:none;
+}
+.desk{
+     display:inline;
+}
+@media screen and (max-width: 1020px) {
+    .desk{
+        display:none;
+    }
+    .mob{
+        display:block;
+    }
+    .col-sm-6{
+        width:90%;
+    }
+    .second{
+        margin-left:35px;
+    }
+    td{
+        width:90%;
+    }
 }
