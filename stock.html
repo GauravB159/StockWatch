@@ -136,6 +136,12 @@
 <script>
     var lastmin;
     var chart=function(data,today,checker){
+                var width1 = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+                if(width1<768){
+                    width1=900;
+                }else{
+                    width1=width1-100;
+                }   
                 var col1=[];
                 for(var i=0;i<5;i++){
                     col1[i]=[];
@@ -166,6 +172,9 @@
                     col1[4].push(data[val]["4. close"]);
                 }
                 var chart = c3.generate({
+                size:{
+                    width:width1
+                },
                 bindto: '#chart',
                 padding: {
                     right: 20,

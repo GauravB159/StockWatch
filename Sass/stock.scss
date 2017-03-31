@@ -225,6 +225,9 @@ td{
     .first,.second,.ch{
         margin-left:20px;
     }    
+    .ch{
+        width:1300px;
+    }
     td{
         width:90%;
         font-size:25px;
@@ -253,7 +256,7 @@ td{
 }
 @media screen and (max-width: 568px) {
     .data{
-        font-size:23px;
+        font-size:18px;
     }
     .date{
         font-size:12px;
