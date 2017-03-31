@@ -195,7 +195,7 @@ td{
 .desk{
      display:inline;
 }
-@media screen and (max-width: 1020px) {
+@media screen and (max-width: 1250px) {
     .desk{
         display:none;
     }
@@ -222,14 +222,18 @@ td{
     .col-sm-6{
         width:90%;
     }
-    .second{
-        margin-left:35px;
-    }
+    .first,.second,.ch{
+        margin-left:20px;
+    }    
     td{
         width:90%;
+        font-size:25px;
     }
     .data{
         font-size:25px;
+    }
+    .date{
+        font-size:15px;
     }
     .dropdown-toggle{
         font-size:20px;
@@ -237,5 +241,28 @@ td{
     }
     .ticker{
         font-size:25px;
+        margin-left:5px;
+    }
+    .table-condensed{
+        height:250px;
+    }
+    .col-sm-6{
+        height:250px;
+        width:92.5%;        
+    }
+}
+@media screen and (max-width: 568px) {
+    .data{
+        font-size:23px;
+    }
+    .date{
+        font-size:15px;
+    }
+    .dropdown-toggle{
+        font-size:15px;
+        color:white !important;
+    }
+    .ticker{
+        font-size:20px;
     }
 }

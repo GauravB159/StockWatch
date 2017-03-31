@@ -87,6 +87,7 @@ $(document).ready(function(){
         }
     }
     var counter=0;
+    var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
     $(".ib,.sixty").click(function(){   
         $(".ib").removeClass("acti");
         $(this).addClass("acti");
@@ -100,7 +101,11 @@ $(document).ready(function(){
             $.getJSON("../interval.json", wrapper(interval,this));
         }
     });
+    if(width > 768){
         $('.sixty').click();
+    }else{
+        $('.sixtymob').click();
+    }
     var form=function(date,dformat){
         var formDate=moment(date).format(dformat);
         return formDate;
