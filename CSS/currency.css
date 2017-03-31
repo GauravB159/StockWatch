@@ -145,6 +145,9 @@ body {
 
   .desksearch {
     display: none; } }
+@media screen and (max-width: 500px) {
+  .navbar-brand {
+    display: none; } }
 .former, .formers {
   border-radius: 0;
   color: white;

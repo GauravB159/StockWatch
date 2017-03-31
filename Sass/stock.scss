@@ -212,3 +212,30 @@ td{
         width:90%;
     }
 }
+@media screen and (max-width: 768px) {
+    .desk{
+        display:none;
+    }
+    .mob{
+        display:block;
+    }
+    .col-sm-6{
+        width:90%;
+    }
+    .second{
+        margin-left:35px;
+    }
+    td{
+        width:90%;
+    }
+    .data{
+        font-size:25px;
+    }
+    .dropdown-toggle{
+        font-size:20px;
+        color:white !important;
+    }
+    .ticker{
+        font-size:25px;
+    }
+}

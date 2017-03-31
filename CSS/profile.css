@@ -166,6 +166,9 @@ body {
 
   .desksearch {
     display: none; } }
+@media screen and (max-width: 500px) {
+  .navbar-brand {
+    display: none; } }
 .col-sm-6 {
   width: 45%;
   height: 525px;

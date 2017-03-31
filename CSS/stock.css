@@ -145,6 +145,9 @@ body {
 
   .desksearch {
     display: none; } }
+@media screen and (max-width: 500px) {
+  .navbar-brand {
+    display: none; } }
 .former, .formers {
   border-radius: 0;
   color: white;
@@ -365,5 +368,30 @@ td {
 
   td {
     width: 90%; } }
+@media screen and (max-width: 768px) {
+  .desk {
+    display: none; }
+
+  .mob {
+    display: block; }
+
+  .col-sm-6 {
+    width: 90%; }
+
+  .second {
+    margin-left: 35px; }
+
+  td {
+    width: 90%; }
+
+  .data {
+    font-size: 25px; }
+
+  .dropdown-toggle {
+    font-size: 20px;
+    color: white !important; }
+
+  .ticker, .ibdesk, .icdesk, .iddesk, .ibcldesk, .ibcddesk {
+    font-size: 25px; } }
 
 /*# sourceMappingURL=stock.css.map */
