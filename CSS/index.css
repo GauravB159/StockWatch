@@ -169,6 +169,9 @@ body {
   background-color: white;
   color: rgba(0, 0, 0, 0.8); }
 
+@media screen and (max-width: 768px) {
+  .former, .formers {
+    font-size: 14px; } }
 body {
   overflow-y: visible; }
 
