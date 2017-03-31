@@ -39,7 +39,7 @@ $('.val').click(function(){
 
 $('.conv').click(function(){
     $('td').removeClass("o9");
-    var num= parseInt($(".frm").val());
+    var num= $(".frm").val();
                 console.log(num);
     var from=$(".from2").children(".child").html();
     var to=$(".to2").children(".child").html();
