@@ -36,6 +36,8 @@ app.get('/chart', function(req, res){
     res.sendFile('chart.html', { root: __dirname} );
 });
 app.get('/currency', function(req, res){
+    var url="http://api.fixer.io/latest?base=USD";
+    writeStock(url,"currency");    
     res.sendFile('currency.html', { root: __dirname} );
 });
 app.get('/ticker',function(req,res){

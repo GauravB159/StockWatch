@@ -44,7 +44,7 @@ $('.conv').click(function(){
     var from=$(".from2").children(".child").html();
     var to=$(".to2").children(".child").html();
     console.log(to);
-    $.getJSON("http://api.fixer.io/latest?base=USD", demo(num,from,to));
+    $.getJSON("../currency.json", demo(num,from,to));
 });
     $('[data-toggle="tooltip"]').tooltip().off("click"); 
 });
