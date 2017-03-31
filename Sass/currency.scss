@@ -15,6 +15,9 @@ td{
     min-width: 100% /8;
     max-width: 100% /8;
 }
+.sep{
+    background-color:rgba(0,0,0,0.8);
+}
 table.fixed { 
     table-layout:fixed; 
     td{
@@ -58,6 +61,7 @@ table.fixed {
     background-color:transparent;
     border:none;
 }
+
 @media screen and (max-width: 768px) {
     .desc{
         display:none;
@@ -70,5 +74,11 @@ table.fixed {
     }
     .mob{
         display:block;
+    }
+    .o9{
+        background-color:rgba(0,0,0,0.95);
+    }
+    .val:hover, .conv:hover{
+        background-color:rgba(0,0,0,0.95);
     }
 }
