@@ -65,3 +65,24 @@
 .logout,.glyphicon-log-out{
     color:red !important;
 }
+.mobsearch{
+    display:none;
+}
+@media screen and (max-width: 768px) {
+.navbar{
+        background-color:black;
+    }
+    .navbar-toggle{
+        margin-top:20px;
+    }
+    .mobsearch{
+        display:block;
+        margin-top:5px;
+        width:80%;
+        margin-left:5%;
+        border:0;
+    }
+    .desksearch{
+        display:none;
+    }
+}
