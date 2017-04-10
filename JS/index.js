@@ -19,5 +19,25 @@ $(document).ready(function(){
         $('.rmr').toggle(200);
         $('.rmrd').toggle(200);
       });
+    $("#lgn").submit(function(){
+        var jqxhr = $.post("/login",$("#lgn").serialize(), function(data){
+            console.log(data);
+        }).done(function() {
+            alert( "Login successful" );
+            })
+          .fail(function(response) {
+            alert(response.responseText);
+          })
+        });
+    $("#rg").submit(function(){
+        var jqxhr = $.post("/register",$("#rg").serialize(), function(data){
+            console.log(data);
+        }).done(function() {
+            alert( "User successfully created" );
+            })
+          .fail(function(response) {
+            alert(response.responseText);
+          })
+        });    
     $('[data-toggle="tooltip"]').tooltip(); 
 });

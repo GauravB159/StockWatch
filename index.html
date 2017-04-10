@@ -53,11 +53,11 @@
 <div class="container-fluid">
     <div class="row r1">
         <div class="col-sm-6">
-            <form class="login" method="POST" action="#">
+            <form class="login" id="lgn" method="POST">
                 <label class="text heading"> Login: </label>
                 <div class="form-group">
-                    <label for="email" class="text2">Email: </label>
-                    <input type="text" class="form-control former" name="email">
+                    <label for="uname" class="text2">Username: </label>
+                    <input type="text" class="form-control former" name="uname">
                 </div>
                 <div class="form-group">
                     <label for="password" class="text2">Password: </label>
@@ -79,8 +79,12 @@
                     <button type="button" class="btn btn-default bttn red"><b>Click to Register</b></button>
                 </div>
             </form>
-            <form class="register" method="POST" action="#">
+            <form class="register" id="rg" method="POST">
                 <label class="text heading"> Register: </label>
+                <div class="form-group">
+                    <label for="un" class="text2">Username: </label>
+                    <input type="text" class="form-control former" name="un">
+                </div>
                 <div class="form-group">
                     <label for="email" class="text2">Email: </label>
                     <input type="text" class="form-control former" name="email">
@@ -90,8 +94,8 @@
                     <input type="password" class="form-control former" name="password">
                 </div>
                 <div class="form-group">
-                    <label for="password" class="text2">Confirm Password: </label>
-                    <input type="password" class="form-control former" name="password">
+                    <label for="cpassword" class="text2">Confirm Password: </label>
+                    <input type="password" class="form-control former" name="cpassword">
                 </div>
                 <div class="btn-toolbar">
                     <button type="submit" name="submit-login" class="btn btn-default bttn green">
