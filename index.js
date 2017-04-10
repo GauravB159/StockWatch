@@ -5,11 +5,19 @@ var $=require("jquery");
 var app = express();
 var fs = require('fs');
 var db = require('./db');
+var session = require('client-sessions');
 var user=new db.User();
 var stock=new db.Stock();
 var port = process.env.PORT || 5000;
+let cheerio = require('cheerio');
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(bodyParser.json());
+app.use(session({
+  cookieName: 'session',
+  secret: 'abcdefghijskamx',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+}));
 /*var CronJob = require('cron').CronJob;
 new CronJob('30 * * * * *', function() {
   console.log('You will see this message every second');
@@ -31,7 +39,30 @@ http.get(url, function(res){
           console.log("Got an error: ", e);
     });
 }
+app.set('view engine', 'ejs');
 app.use(express.static(__dirname ));
+app.use(function(req, res, next) {
+  if (req.session && req.session.user) {
+    db.User.findOne({ email: req.session.user.email }, function(err, user) {
+      if (user) {
+        req.user = user;
+        delete req.user.password; 
+        req.session.user = user; 
+        res.locals.user = user;
+      }
+      next();
+    });
+  } else {
+    next();
+  }
+});
+function requireLogin (req, res, next) {
+  if (!req.user) {
+    res.redirect('/login');
+  } else {
+    next();
+  }
+};
 var ticker=0;
 
 app.post('/stock', function(req, res){
@@ -49,14 +80,19 @@ app.get('/currency', function(req, res){
 app.get('/ticker',function(req,res){
     res.send(ticker);
 });
+app.get('/loggedin', requireLogin,function(req,res){
+    var acc=req.session.user.username;
+    app.render('profile',{acc:acc},function(err, html) {
+        res.send(html);
+    });
+});
 app.post('/register',function(req,res){
-    console.log("hello");
     var uname=req.body.un;
     var eml=req.body.email;
     var pass=req.body.password;
     var cpass=req.body.cpassword;
     console.log(uname);
-    var message="Check";
+    var message;
     if(pass != cpass){
         res.status(400);
         message="Passwords do not match";
@@ -84,23 +120,26 @@ app.post('/register',function(req,res){
       }
     });
 });
-/*app.post('/',function(req,res){
-    res.sendFile('index.html', { root: __dirname} );
-});*/
+
 app.post('/login',function(req,res){
     var uname=req.body.uname;
     var pass=req.body.password;
+    var message;
     user.findByUsername(uname,function(user){
-        console.log(user);
         if(user == null){
-            res.status(502).send("User not found");
+            res.status(500);
+            message="User not found";
         }else if(user.password != pass){
-            res.status(600).send("Incorrect Password");
+                res.status(500);
+            message="Incorrect Password";
         }else{
-            res.json(user);
+            req.session.user = user;
+            res.redirect("/loggedin");
         }
+        res.send(message);
     });
 });
+
 app.post('/time',function(req, res){ 
       var body = req.body;
       interval=body.number;
