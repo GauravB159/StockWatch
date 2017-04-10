@@ -29,14 +29,14 @@ $(document).ready(function(){
             alert(response.responseText);
           })
         });
-    $("#rg").submit(function(){
-        var jqxhr = $.post("/register",$("#rg").serialize(), function(data){
+    $("#rgb").click(function(){
+        $.post("/register",$("#rg").serialize(), function(data){
             console.log(data);
         }).done(function() {
             alert( "User successfully created" );
             })
           .fail(function(response) {
-            alert(response.responseText);
+            console.log(response.responseText);
           })
         });    
     $('[data-toggle="tooltip"]').tooltip(); 

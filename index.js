@@ -50,15 +50,17 @@ app.get('/ticker',function(req,res){
     res.send(ticker);
 });
 app.post('/register',function(req,res){
+    console.log("hello");
     var uname=req.body.un;
     var eml=req.body.email;
     var pass=req.body.password;
     var cpass=req.body.cpassword;
+    console.log(uname);
     var message="Check";
     if(pass != cpass){
-        res.statusCode=507;
-        message="Passwords do not match!";
-    }     
+        res.status(400);
+        message="Passwords do not match";
+    }
     db.User.find({$or : [{username:uname},{email:eml}]}, function(err, data) {
       if (err) throw err;
       if(data == "" && pass == cpass){
@@ -66,10 +68,14 @@ app.post('/register',function(req,res){
           user.create(uname,pass,eml,500);
           res.sendFile('index.html', { root: __dirname} );
       }else if(data != ""){
+          console.log("hell2");
           console.log("x"+data);
           user.findByUsername(uname,function(data){
+                res.status(400);
                 if(data != null){
-                    message="Username already exists"
+                    message="Username already exists";
+                }else if(pass != cpass){
+                    message="Passwords do not match";
                 }else{
                     message="Email already exists";
                 }
@@ -78,9 +84,9 @@ app.post('/register',function(req,res){
       }
     });
 });
-app.post('/',function(req,res){
+/*app.post('/',function(req,res){
     res.sendFile('index.html', { root: __dirname} );
-});
+});*/
 app.post('/login',function(req,res){
     var uname=req.body.uname;
     var pass=req.body.password;
