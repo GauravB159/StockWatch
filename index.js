@@ -133,7 +133,7 @@ app.post('/buy',function(req,res){
                     user.updateBalance(acc,balance);
                     var date=moment().format("YYYY-MM-DD HH:mm");
                     history.create(ticker,acc,price,qty,date,"Bought");
-                    stock.findByUandS(acc,ticker,function(data){
+                    stock.findByUandS(acc,price,obj['close'],function(data,price){
                         if(data == null){
                             stock.create(acc,ticker,qty);
                         }else{
@@ -179,7 +179,7 @@ app.post('/sell',function(req,res){
                 var balance=parseFloat(data.balance);
                 balance=balance+price*qty;
                 balance=parseFloat(balance).toFixed(2);
-                stock.findByUandS(acc,ticker,function(data){
+                stock.findByUandS(acc,ticker,obj['4. close'],function(data,price){
                     if(data == null){
                         hold.status(305);
                         hold.send("You do not have stocks of this company");
