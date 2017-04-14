@@ -14,30 +14,6 @@ body {
   font-size: 20px;
   color: white; }
 
-.former, .formers {
-  border-radius: 0;
-  color: white;
-  font-weight: bold;
-  font-size: 22px;
-  font-family: "Montserrat", sans-serif;
-  background-color: rgba(0, 0, 0, 0.8);
-  border: none;
-  width: 60%; }
-
-.btn, .bttn {
-  border-radius: 0;
-  font-family: "Montserrat", sans-serif; }
-
-.bttn {
-  font-size: 20px; }
-
-.formers {
-  background-color: white;
-  color: rgba(0, 0, 0, 0.8); }
-
-@media screen and (max-width: 768px) {
-  .former, .formers {
-    font-size: 14px; } }
 .glyphicon-search {
   color: black !important; }
 
@@ -172,6 +148,30 @@ body {
 @media screen and (max-width: 500px) {
   .navbar-brand {
     display: none; } }
+.former, .formers {
+  border-radius: 0;
+  color: white;
+  font-weight: bold;
+  font-size: 22px;
+  font-family: "Montserrat", sans-serif;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: none;
+  width: 60%; }
+
+.btn, .bttn {
+  border-radius: 0;
+  font-family: "Montserrat", sans-serif; }
+
+.bttn {
+  font-size: 20px; }
+
+.formers {
+  background-color: white;
+  color: rgba(0, 0, 0, 0.8); }
+
+@media screen and (max-width: 768px) {
+  .former, .formers {
+    font-size: 14px; } }
 .col-sm-6 {
   width: 45%;
   height: 525px;

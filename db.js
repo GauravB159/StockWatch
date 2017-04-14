@@ -23,7 +23,8 @@ var stockSchema = new Schema({
   ticker:{type: String, required: true},
   username: { type: String, required: true},
   price: {type: Number,required:true},
-  quantity: {type:Number,required:true}
+  quantity: {type:Number,required:true},
+  pdate: {type: String, required:true}
 });
 userSchema.methods.create = function(uname,pwd,eml,blnc){
     var temp = mongoose.model('User',userSchema)({
@@ -63,6 +64,11 @@ userSchema.methods.removeByUsername = function(uname){
     this.model('User').findOneAndRemove({ username: uname }, function(err) {
       if (err) throw err;
     });
+}
+userSchema.methods.updateBalance = function(uname,balance){
+    this.model('User').findOneAndUpdate({username:uname}, {balance:balance}, function(err, doc){
+    if (err) console.log(err);
+});
 }
 userSchema.methods.validPassword = function( pwd ) {
     return ( this.password === pwd );
@@ -111,12 +117,13 @@ watchSchema.methods.removeByUandS = function(uname,tick,callback){
       callback(user);
     });
 }
-stockSchema.methods.create = function(tick,uname,prce,qty){
+stockSchema.methods.create = function(tick,uname,prce,qty,pdate){
     var temp = mongoose.model('Stock',stockSchema)({
       ticker:tick,
       username:uname,
       price:prce,
-      quantity:qty
+      quantity:qty,
+      pdate:pdate
     });
     temp.save(function(err) {
       if (err) throw err;
@@ -125,7 +132,6 @@ stockSchema.methods.create = function(tick,uname,prce,qty){
 stockSchema.methods.printAllStocks = function(){
     this.model('Stock').find({}, function(err, users) {
       if (err) throw err;
-
       console.log(users);
     });
 }

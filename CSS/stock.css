@@ -189,7 +189,7 @@ body {
   width: fit-content;
   padding-left: 20px !important;
   padding-right: 20px !important;
-  padding-bottom: 2px;
+  padding-bottom: 3px;
   display: inline-block; }
 
 .dropdown-toggle {
@@ -309,6 +309,28 @@ td {
 
 .green {
   color: green; }
+
+.popover-title, .popover-content {
+  font-family: "Montserrat", sans-serif;
+  color: white;
+  font-size: 18px;
+  font-weight: 700; }
+
+#qty {
+  color: black;
+  font-weight: 700; }
+
+.popover, .popover-title {
+  border-radius: 0;
+  background-color: rgba(0, 0, 0, 0.8); }
+
+#buys {
+  margin-top: 10px;
+  background-color: rgba(0, 0, 0, 0.9); }
+
+#popover {
+  text-decoration: none;
+  color: white; }
 
 .hidden {
   display: none; }

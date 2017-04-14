@@ -74,7 +74,16 @@
             <li class="text ib ibdesk ibcl ibcldesk">5</li>
             <li class="text ib ibdesk ibcl ibcldesk">1</li>
             <li class="text graph icdesk"><i class="fa fa-line-chart"></i></li>
-            <li class="text buy iddesk">Buy</li>
+            <li class="text buy iddesk">
+                <a href="#" id="popover" data-placement="bottom">Buy</a>
+                <div id="popover-head" class="hide">
+                  Buy Stock
+                </div>
+                <div id="popover-content" class="hide" style="color:black">
+                  Quantity: <input type="text" id="qty" name="qty">
+                  <button type="button" class="buys" id="buys">Buy</button>
+                </div>
+            </li>
             <li class="text watch iddesk" style="border-right:0;">Watch</li>
         </div>
         <div class="dropdown mob"> 

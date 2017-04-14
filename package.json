@@ -29,6 +29,7 @@
     "http-delayed-response": "0.0.4",
     "jquery": "^3.2.1",
     "jsonfile": "^2.4.0",
+    "moment": "^2.18.1",
     "mongodb": "^2.2.25",
     "mongoose": "^4.9.1",
     "nodemailer": "^3.1.8",

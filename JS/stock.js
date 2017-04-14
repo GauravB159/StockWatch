@@ -117,6 +117,24 @@ $(document).ready(function(){
             console.log(response.responseText);
           });
     });
+    $(document).on('click', '.buys', function(){
+        var qty=$("#qty").val();
+        var price=$(".cl").html();
+        
+        if(price == ""){
+            alert("Price has not loaded yet, please try again after price loads");
+        }else{
+            $.post("/buy",{qty:qty,ticker:ticker,price:price}, function(data){
+                console.log(data);
+            }).done(function() {
+                alert( "User successfully created" );
+                })
+              .fail(function(response) {
+                console.log(response.responseText);
+              });
+          }
+    });   
+            
     var form=function(date,dformat){
         var formDate=moment(date).format(dformat);
         return formDate;
@@ -128,4 +146,13 @@ $(document).ready(function(){
         return (curr-prev)/prev;
     }
     $('[data-toggle="tooltip"]').tooltip(); 
+    $('#popover').popover({ 
+    html : true,
+    title: function() {
+      return $("#popover-head").html();
+    },
+    content: function() {
+      return $("#popover-content").html();
+    }
+});
 });

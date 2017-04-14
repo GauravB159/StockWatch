@@ -9,6 +9,7 @@ var session = require('express-session')
 var user=new db.User();
 var stock=new db.Stock();
 var watch=new db.Watch();
+var moment = require('moment');
 var port = process.env.PORT || 5000;
 var cheerio = require('cheerio');
 var passport = require('passport');
@@ -96,6 +97,51 @@ app.post('/watch',function(req,res){
     var ticker=req.body.ticker;
     watch.create(ticker,acc);
     res.send("Stock added to watchlist");
+});
+app.post('/buy',function(req,res){
+    var qty=req.body.qty;
+    var ticker=req.body.ticker;
+    var acc=req.session.passport.user.username;     
+    qty=parseInt(qty);
+    var hold=res;
+    var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval=1min&apikey=1977';
+    http.get(url, function(res){
+        var body = '';
+        res.on('data', function(chunk){
+        body += chunk;
+    });
+    res.on('end', function(){
+        var tJson = JSON.parse(body);
+        fs.writeFileSync("temp/"+ticker+'.json', JSON.stringify(tJson));
+        var obj;
+        fs.readFile('temp/'+ticker+".json", 'utf8', function (err, data) {
+             if (err) throw err;
+             obj = JSON.parse(data);
+             var date=obj["Meta Data"]["3. Last Refreshed"];
+             obj=obj["Time Series (1min)"][date];
+             var price=obj["4. close"];
+             price=parseFloat(price);
+             user.findByUsername(acc,function(data){
+                var balance=parseFloat(data.balance);
+                if(price*qty > balance){
+                    message="You do not have sufficient balance";
+                }else{
+                    balance=balance-price*qty;
+                    balance=parseFloat(balance).toFixed(2);
+                    user.updateBalance(acc,balance);
+                    var date=moment().format("YYYY-MM-DD HH:mm");
+                    console.log(date);
+                    console.log(balance);
+                    stock.create(ticker,acc,price,qty,date);
+                    message="Stocks bought successfully, your new balance is " + balance;
+                }
+                hold.send(message);
+            });
+        });        
+    });
+    }).on('error', function(e){
+          console.log("Got an error: ", e);
+    });
 });
 app.get('/watchlist',function(req,res,next){
     var acc=req.session.passport.user.username;  
