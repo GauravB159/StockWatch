@@ -125,7 +125,7 @@ app.post('/buy',function(req,res){
              user.findByUsername(acc,function(data){
                 var balance=parseFloat(data.balance);
                 if(price*qty > balance){
-                    hold.status(500);
+                    hold.status(305);
                     hold.send("You do not have sufficient balance");
                 }else{
                     balance=balance-price*qty;
@@ -181,7 +181,7 @@ app.post('/sell',function(req,res){
                 balance=parseFloat(balance).toFixed(2);
                 stock.findByUandS(acc,ticker,function(data){
                     if(data == null){
-                        hold.status(500);
+                        hold.status(305);
                         hold.send("You do not have stocks of this company");
                     }else{
                         user.updateBalance(acc,balance);
@@ -189,7 +189,7 @@ app.post('/sell',function(req,res){
                         history.create(ticker,acc,price,qty,date,"Sold");
                         var cqty=data.quantity;
                         if(qty > cqty){
-                            hold.status(500);
+                            hold.status(305);
                             hold.send("You do not have those many stocks to sell");
                         }else{
                             qty=cqty-qty;
