@@ -53,11 +53,11 @@
 <div class="container-fluid">
     <div class="row r1">
         <div class="col-sm-6">
-            <form class="login" id="lgn" method="POST">
+            <form class="login" id="lgn" method="POST" action="/login">
                 <label class="text heading"> Login: </label>
                 <div class="form-group">
                     <label for="uname" class="text2">Username: </label>
-                    <input type="text" class="form-control former" name="uname">
+                    <input type="text" class="form-control former" name="username">
                 </div>
                 <div class="form-group">
                     <label for="password" class="text2">Password: </label>
@@ -65,14 +65,14 @@
                 </div>
                 <div class="form-group">
                     <div class="btn-group" data-toggle="buttons">
-                        <label class="btn bttn btn-rmr bcl">
+                        <label class="btn bttn btn-rmr bcl rmr-red">
                             <input type="checkbox" name="options" id="option1"> <span class="rmr">Remember Me</span><span class="rmrd">Remembered</span>
                         </label>
                     </div>
                 </div>
                  
                 <div class="btn-toolbar">
-                    <button type="button" name="submit-login" class="btn btn-default bttn green" id="logn">
+                    <button type="submit" name="submit-login" class="btn btn-default bttn green" id="logn">
                         <b>Login</b>
                     </button>
                      

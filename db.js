@@ -14,11 +14,17 @@ var userSchema = new Schema({
   balance:{ type: Number, required:true}
 });
 
-var stockSchema = new Schema({
+var watchSchema = new Schema({
   ticker:{type: String, required: true},
   username: { type: String, required: true} 
 });
 
+var stockSchema = new Schema({
+  ticker:{type: String, required: true},
+  username: { type: String, required: true},
+  price: {type: Number,required:true},
+  quantity: {type:Number,required:true}
+});
 userSchema.methods.create = function(uname,pwd,eml,blnc){
     var temp = mongoose.model('User',userSchema)({
       username: uname,
@@ -58,10 +64,12 @@ userSchema.methods.removeByUsername = function(uname){
       if (err) throw err;
     });
 }
+userSchema.methods.validPassword = function( pwd ) {
+    return ( this.password === pwd );
+};
+watchSchema.methods.create = function(tick,uname){
 
-stockSchema.methods.create = function(tick,uname){
-
-    var temp = mongoose.model('Stock',stockSchema)({
+    var temp = mongoose.model('Watch',watchSchema)({
       ticker:tick,
       username:uname
     });
@@ -70,38 +78,75 @@ stockSchema.methods.create = function(tick,uname){
     });
 }
 
-stockSchema.methods.printAllUsers = function(){
-    this.model('Stock').find({}, function(err, users) {
+watchSchema.methods.printAllUsers = function(){
+    this.model('Watch').find({}, function(err, users) {
       if (err) throw err;
 
       console.log(users);
     });
 }
 
-stockSchema.methods.removeByUsername = function(uname){
-    this.model('Stock').findOneAndRemove({ username: uname }, function(err) {
+watchSchema.methods.removeByUsername = function(uname){
+    this.model('Watch').findOneAndRemove({ username: uname }, function(err) {
       if (err) throw err;
     });
 }
 
-stockSchema.methods.findByUsername = function(uname){
+watchSchema.methods.findByUsername = function(uname,callback){
+    this.model('Watch').find({ username: uname }, function(err, user) {
+      if (err) throw err;
+      callback(user);      
+    });
+}
+
+watchSchema.methods.findByTicker = function(tick,callback){
+    this.model('Watch').find({ ticker: tick }, function(err, user) {
+      if (err) throw err;
+      callback(user);
+    });
+}
+watchSchema.methods.removeByUandS = function(uname,tick,callback){
+    this.model('Watch').findOneAndRemove({ username: uname,ticker:tick }, function(err) {
+      if (err) throw err;
+      callback(user);
+    });
+}
+stockSchema.methods.create = function(tick,uname,prce,qty){
+    var temp = mongoose.model('Stock',stockSchema)({
+      ticker:tick,
+      username:uname,
+      price:prce,
+      quantity:qty
+    });
+    temp.save(function(err) {
+      if (err) throw err;
+    });
+}
+stockSchema.methods.printAllStocks = function(){
+    this.model('Stock').find({}, function(err, users) {
+      if (err) throw err;
+
+      console.log(users);
+    });
+}
+stockSchema.methods.findByUsername = function(uname,callback){
     this.model('Stock').find({ username: uname }, function(err, user) {
       if (err) throw err;
-      console.log(user);
+      callback(user);
     });
 }
-
-stockSchema.methods.findByTicker = function(tick){
-    this.model('Stock').find({ ticker: tick }, function(err, user) {
+stockSchema.methods.removeByUandS = function(uname,tick,callback){
+    this.model('Stock').findOneAndRemove({ username: uname,ticker:tick }, function(err) {
       if (err) throw err;
-      console.log(user);
+      callback(user);
     });
 }
-
 var Stock = mongoose.model('Stock',stockSchema);
 var User = mongoose.model('User', userSchema);
+var Watch=mongoose.model('Watch',watchSchema);
 module.exports = {
     User: User,
-    Stock:Stock
+    Stock:Stock,
+    Watch:Watch 
 };
 

@@ -22,7 +22,7 @@ $(document).ready(function(){
     }
     var wrapper =function(interval,caller){
          return function(data) {
-            $.getJSON("../daily.json",function(daily){
+            $.getJSON("../daily/"+ticker+".json",function(daily){
                 if(data == undefined){
                     counter+=1;
                     $(caller).click();
@@ -31,6 +31,7 @@ $(document).ready(function(){
                     var symbol=data["Meta Data"]["2. Symbol"]; 
                     var sym2=daily["Meta Data"]["2. Symbol"]; 
                     var inter=interval+"min";
+                                            console.log(data);
                     if(intCheck != inter || symbol != ticker || symbol != sym2){
                         counter+=1;
                         $(caller).click();
@@ -64,7 +65,7 @@ $(document).ready(function(){
                             if(val > 0.0){
                                 $('.'+cls).addClass('green');
                                 if(cls=="cl"){
-                                    $('.ticker').html($('.ticker').html()+" <span class='green'><span class='glyphicon glyphicon-chevron-up'></span>"+"("+val+"%)"+"</span>");       
+                                    $('.ticker').html($('.ticker').html()+"<span class='green'><span class='glyphicon glyphicon-chevron-up'></span>"+"("+val+"%)"+"</span>");       
                                 }
                             }else{
                                 $('.'+cls).addClass('red');
@@ -76,10 +77,10 @@ $(document).ready(function(){
                         date=moment(date).add(570, 'minutes');
                         date=form(date,'YYYY-MM-DD HH:mm:ss');
                         $('.date').html(date.toString() + " IST");
-                        $('.open').html(stock["1. open"]+$('.open').html());
-                        $('.high').html(stock["2. high"]+$('.high').html());
-                        $('.low').html(stock["3. low"]+$('.low').html());
-                        $('.cl').html(stock["4. close"]+$('.cl').html());
+                        $('.open').html(parseFloat(stock["1. open"]).toFixed(2)+$('.open').html());
+                        $('.high').html(parseFloat(stock["2. high"]).toFixed(2)+$('.high').html());
+                        $('.low').html(parseFloat(stock["3. low"]).toFixed(2)+$('.low').html());
+                        $('.cl').html(parseFloat(stock["4. close"]).toFixed(2)+$('.cl').html());
                         $('.volume').html(stock["5. volume"]+$('.volume').html());
                     }
                 }
@@ -106,6 +107,16 @@ $(document).ready(function(){
     }else{
         $('.sixtymob').click();
     }
+    $(".watch").click(function(){
+        $.post("/watch",{ticker:ticker}, function(data){
+            console.log(data);
+        }).done(function() {
+            alert( "User successfully created" );
+            })
+          .fail(function(response) {
+            console.log(response.responseText);
+          });
+    });
     var form=function(date,dformat){
         var formDate=moment(date).format(dformat);
         return formDate;

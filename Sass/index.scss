@@ -55,12 +55,16 @@ body{
 
 .btn-rmr{
     margin-bottom: -20px;
-    background-color: rgba(180, 0, 0, 0.85);
     border: none;
     color:white !important;
     box-shadow:none !important;
 }
-
+.rmr-red{
+    background-color: rgba(180, 0, 0, 0.85);
+}
+.rmr-green{
+    background-color: rgba(0, 180, 0, 0.85);
+}
 .heading{
     font-size:30px;
 }
