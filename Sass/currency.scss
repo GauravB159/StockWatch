@@ -15,6 +15,9 @@ td{
     min-width: 100% /8;
     max-width: 100% /8;
 }
+.sep{
+    background-color:rgba(0,0,0,0.8);
+}
 table.fixed { 
     table-layout:fixed; 
     td{
@@ -47,6 +50,9 @@ table.fixed {
 .from2,.to2{
     width:100px !important;
 }
+.mob{
+    display:none;
+}   
 .frm{
     width: 100%;
     height: 100%;
@@ -54,4 +60,25 @@ table.fixed {
     padding-left:20px;
     background-color:transparent;
     border:none;
+}
+
+@media screen and (max-width: 768px) {
+    .desc{
+        display:none;
+    }
+    td{
+        font-size:23px;
+    }
+    .desk{
+        display:none;
+    }
+    .mob{
+        display:block;
+    }
+    .o9{
+        background-color:rgba(0,0,0,0.95);
+    }
+    .val:hover, .conv:hover{
+        background-color:rgba(0,0,0,0.95);
+    }
 }

@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
 $text-color: white;
 $font-family:'Montserrat', sans-serif;
+*{
+    box-sizing:border-box;
+}
 body{
     background-image: url("../Img/stock.jpg");
     background-repeat: no-repeat;

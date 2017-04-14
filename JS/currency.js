@@ -2,7 +2,6 @@ $(document).ready(function(){
 var demo = function(val,frm,too){
         return function(data) {
             data.rates.USD=1;
-            console.log(frm);
             fx.rates = data.rates;
             var rate = fx(val).from(frm).to(too);
             $('.answer').html(rate.toFixed(2));
@@ -38,13 +37,19 @@ $('.val').click(function(){
     $('td').removeClass("check");    
 });
 
+$(".frmmob").change(function(){
+    $(".frmdesk").val($(this).val());
+});
+$(".frmdesk").change(function(){
+    $(".frmmob").val($(this).val());
+});
 $('.conv').click(function(){
     $('td').removeClass("o9");
-    var num= parseInt($(".frm").val());
+    var num= $(".frm").val();
     var from=$(".from2").children(".child").html();
     var to=$(".to2").children(".child").html();
-    console.log(to);
-    $.getJSON("http://api.fixer.io/latest?base=USD", demo(num,from,to));
+    console.log(num);    
+    $.getJSON("../currency.json", demo(num,from,to));
 });
     $('[data-toggle="tooltip"]').tooltip().off("click"); 
 });

@@ -1,4 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,700");
+* {
+  box-sizing: border-box; }
+
 body {
   background-image: url("../Img/stock.jpg");
   background-repeat: no-repeat;
@@ -60,6 +63,91 @@ body {
     background-color: rgba(0, 0, 0, 0.8);
     min-width: 100px; }
 
+.converter, .glyphicon-usd {
+  color: green !important; }
+
+.glyphicon-usd {
+  margin-right: 2px;
+  font-weight: bold; }
+
+.glyphicon-user {
+  margin-right: 4px; }
+
+.logout, .glyphicon-log-out {
+  color: red !important; }
+
+.mobsearch {
+  display: none; }
+
+@media screen and (max-width: 930px) {
+  .navbar-header {
+    float: none; }
+
+  .navbar-left, .navbar-right {
+    float: none !important; }
+
+  .navbar-toggle {
+    display: block; }
+
+  .navbar-collapse {
+    border-top: 1px solid transparent;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1); }
+
+  .navbar-fixed-top {
+    top: 0;
+    border-width: 0 0 1px; }
+
+  .navbar-collapse.collapse {
+    display: none !important; }
+
+  .navbar-nav {
+    float: none !important;
+    margin-top: 7.5px; }
+
+  .navbar-nav > li {
+    float: none; }
+
+  .navbar-nav > li > a {
+    padding-top: 10px;
+    padding-bottom: 10px; }
+
+  .collapse.in {
+    display: block !important; }
+
+  .navbar {
+    background-color: black; }
+
+  .navbar-toggle {
+    margin-top: 20px; }
+
+  .mobsearch {
+    display: block;
+    margin-top: 20px;
+    width: 80%;
+    margin-left: 10%;
+    border: 0; }
+
+  .desksearch {
+    display: none; } }
+@media screen and (max-width: 768px) {
+  .navbar {
+    background-color: black; }
+
+  .navbar-toggle {
+    margin-top: 20px; }
+
+  .mobsearch {
+    display: block;
+    margin-top: 5px;
+    width: 80%;
+    margin-left: 5%;
+    border: 0; }
+
+  .desksearch {
+    display: none; } }
+@media screen and (max-width: 500px) {
+  .navbar-brand {
+    display: none; } }
 .former, .formers {
   border-radius: 0;
   color: white;
@@ -81,10 +169,16 @@ body {
   background-color: white;
   color: rgba(0, 0, 0, 0.8); }
 
+@media screen and (max-width: 768px) {
+  .former, .formers {
+    font-size: 14px; } }
+body {
+  overflow-y: visible; }
+
 .well-black {
   display: flex;
   background-color: rgba(0, 0, 0, 0.7) !important;
-  margin-top: 10.8%;
+  margin-top: 70px;
   height: 591px;
   width: 102.3%;
   margin-bottom: 0;
@@ -125,12 +219,21 @@ body {
 
 .btn-rmr {
   margin-bottom: -20px;
-  background-color: rgba(180, 0, 0, 0.85);
   border: none;
   color: white !important;
   box-shadow: none !important; }
 
+.rmr-red {
+  background-color: rgba(180, 0, 0, 0.85); }
+
+.rmr-green {
+  background-color: rgba(0, 180, 0, 0.85); }
+
 .heading {
   font-size: 30px; }
+
+@media screen and (max-width: 768px) {
+  .desc {
+    display: none; } }
 
 /*# sourceMappingURL=index.css.map */

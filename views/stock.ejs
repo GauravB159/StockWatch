@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>StockWatch</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
+  <script src="Resources/moment.js"></script>
+  <script src="Resources/timezone.js"></script>  
+  <link rel="stylesheet" href="../CSS/stock.css">
+  <script src="../JS/stock.js"></script>
+  <script src="https://use.fontawesome.com/279015a618.js"></script>
+</head>
+<body>
+<nav class="navbar nav navbar-inverse navbar-fixed-top text" id="result">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>                        
+        </button>
+      <a class="navbar-brand" href="#">StockWatch</a>
+      <form class="navbar-form navbar-left mobsearch" method="POST" action="stocklogged">
+          <div class="input-group">
+            <input type="text" class="form-control formers" name="ticker" placeholder="Search a Stock eg. GOOG">
+            <div class="input-group-btn">
+              <button class="btn btn-default" type="submit">
+                <i class="glyphicon glyphicon-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav boldem">
+          <li><a href="#">Home</a></li>
+          <li><a href="#" class="converter"><span class="glyphicon glyphicon-usd"> </span>Converter</a></li>
+          <li><a href="watchlist">Watchlist</a></li>
+        </ul>
+        <form class="navbar-form navbar-left desksearch" method="POST" action="stocklogged">
+          <div class="input-group">
+            <input type="text" class="form-control formers" name="ticker" placeholder="Search a Stock eg. GOOG">
+            <div class="input-group-btn">
+              <button class="btn btn-default" type="submit">
+                <i class="glyphicon glyphicon-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+        <ul class="nav navbar-nav boldem navbar-right">
+            <li class="active"><a href="#"><span class="glyphicon glyphicon-user"> </span><span id="acc"><%= acc %></span></a></li>
+            <li><a href="#" class="logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+        </ul>
+    </div>
+  </div>
+</nav>
+<div class="container-fluid">
+    <ul class="list-inline">
+        <div class="desk"> 
+             <li class="ticker text"></li>
+            <li class="text ibdesk ib"  style="border-left:3px solid black"><div data-toggle="tooltip" data-placement="bottom" title="Unit: Minutes. Smaller intervals take more time to load!">Refresh Rate: </div></li>
+            <li class="text ib ibdesk hidden sh ibcddesk monthly">Monthly</li>
+            <li class="text ib ibdesk hidden sh ibcddesk weekly ">Weekly</li>
+            <li class="text ib ibdesk hidden sh ibcddesk daily">Daily</li> 
+            <li class="text ib ibdesk ibcl ibcldesk sixty">60</li>
+            <li class="text ib ibdesk ibcl ibcldesk">30</li>
+            <li class="text ib ibdesk ibcl ibcldesk">15</li>
+            <li class="text ib ibdesk ibcl ibcldesk">5</li>
+            <li class="text ib ibdesk ibcl ibcldesk">1</li>
+            <li class="text graph icdesk"><i class="fa fa-line-chart"></i></li>
+            <li class="text buy iddesk">
+                <a href="#" id="popover" data-placement="bottom">Buy</a>
+                <div id="popover-head" class="hide">
+                  Buy Stock
+                </div>
+                <div id="popover-content" class="hide" style="color:black">
+                  Quantity: <input type="text" id="qty" name="qty">
+                  <button type="button" class="buys" id="buys">Buy</button>
+                </div>
+            </li>
+            <li class="text watch iddesk" style="border-right:0;">Watch</li>
+        </div>
+        <div class="dropdown mob"> 
+            <li class="ticker text"></li>
+            <button class="btn btn-rmr dropdown-toggle" type="button" data-toggle="dropdown">Options
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu dropdown-menu-right">
+                <li class="text ib dropdown-header ibmob abc"  style="border-left:3px solid black">Refresh Rate </li>
+                <li class="text ib hidden sh ibcd monthly ibmob">Monthly</li>
+                <li class="text ib hidden sh ibcd weekly ibmob">Weekly</li>
+                <li class="text ib hidden sh ibcd daily ibmob">Daily</li> 
+                <li class="text ib ibcl ibmob sixtymob">60</li>
+                <li class="text ib ibcl ibmob">30</li>
+                <li class="text ib ibcl ibmob">15</li>
+                <li class="text ib ibcl ibmob">5</li>
+                <li class="text ib ibcl ibmob">1</li>
+                <li class="divider"></li>                
+                <li class="text graph ic ibmob">Graph</li>
+                <li class="text buy id ibmob">Buy</li>
+                <li class="text watch id ibmob" style="border-right:0;">Watch</li>
+            </ul>
+        </div>
+        
+    </ul>
+    <div class="row bod">
+        <div class="col-sm-6 first">
+            <table class="text table-condensed" border=1>
+                <tr>
+                    <td>Last Update</td>
+                    <td class="data date"></td>
+                </tr>
+                <tr>
+                    <td>Open</td>
+                    <td class="data open"><span></span></td>
+                </tr>
+                <tr>
+                    <td>Close</td>
+                    <td class="data cl"><span> </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-6 second">
+            <table class="text table-condensed">
+                <tr>
+                    <td>High</td>
+                    <td class="data high"><span> </td>
+                </tr>
+                <tr>
+                    <td>Low</td>
+                    <td class="data low"><span> </td>
+                </tr>
+                <tr>
+                    <td>Volume</td>
+                    <td class="data volume"><span> </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row hidden char">
+            <div id="chart" class="ch"></div>
+    </div>
+</div>
+</div>
+<script>
+    var lastmin;
+    $.get('/ticker',function(data){
+        ticker=data;
+        $(".ticker").html(ticker);
+    });
+    var chart=function(data,today,checker){
+                var width1 = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+                if(width1<768){
+                    width1=900;
+                }else{
+                    width1=width1-100;
+                }   
+                var col1=[];
+                for(var i=0;i<5;i++){
+                    col1[i]=[];
+                }
+                var format="";
+                var yform="";
+                if(checker == true){
+                    format='%Y-%m-%d %H:%M:%S';
+                    yform='%H:%M';
+                }else{
+                    format='%Y-%m-%d';
+                    yform='%Y-%m-%d';
+                }
+                for(var val in data){
+                    var hold=val;
+                    if(checker == true){
+                        var comp=val[8]+val[9];
+                        if(comp != today){
+                            break;
+                        }
+                    }else{
+                        hold=moment(val).format("YYYY-MM-DD");
+                    }
+                    col1[0].push(hold);
+                    col1[1].push(data[val]["1. open"]);
+                    col1[2].push(data[val]["2. high"]);
+                    col1[3].push(data[val]["3. low"]);
+                    col1[4].push(data[val]["4. close"]);
+                }
+                var chart = c3.generate({
+                size:{
+                    width:width1
+                },
+                bindto: '#chart',
+                padding: {
+                    right: 20,
+                    left:80,
+                    top:5
+                },
+                data: {
+                      x: 'date',
+                      xFormat: format,
+                      json: {
+                            date: col1[0],
+                            Open: col1[1],
+                            Close: col1[4],
+                            High: col1[2],
+                            Low: col1[3]
+                     }
+                },
+                axis : {
+                        x : {
+                            type : 'timeseries',
+                            label: "Time",
+                            tick : {
+                                format : yform
+                        }
+                    },
+                        y: {
+                            label: "Value",
+                            tick: {
+                                format: d3.format('.2f')
+                            }
+                        }
+                    }
+                });
+            }
+    var graphGen=function(val,checker){
+            $.getJSON(val+".json",function(data){
+                var interval=$('.acti').html();
+                var today=data["Meta Data"]["3. Last Refreshed"];
+                if(checker == true){
+                    var check=moment().tz("America/Toronto").format('DD');
+                    today=today[8]+today[9];
+                    if(check != today){
+                        alert("The stock market was closed today so no intraday data available");
+                        return;
+                    }
+                    data=data["Time Series ("+interval+"min)"];
+                }else{
+                    if(interval == "Daily"){
+                        data=data["Time Series ("+interval+")"];
+                    }else{
+                        data=data[interval+" Time Series"];
+                    }
+                }
+                chart(data,today,checker);
+            }); 
+        }
+    $(".graph").click(function(){
+        graphGen("interval",true);
+        $('.graph').css("border-left","3px solid black");
+        $('.bod').toggleClass("hidden");
+        $('.sh').toggleClass("hidden");
+        $('.watch').toggleClass("hidden");
+        $('.buy').toggleClass("hidden");    
+        $('.char').toggleClass("hidden");
+        if($('.ibcl').hasClass("checker") && !(lastmin.hasClass("acti"))){
+            $('.ib').removeClass("acti");
+            lastmin.addClass("acti");
+        }
+        $('.ibcl').toggleClass("checker");
+    });
+    $(".ibcl").click(function(){
+        lastmin=$(this);
+        if($(this).hasClass("checker")){
+            graphGen("interval",true);
+        }
+    });
+    $(".sh").click(function(){
+        var str=$(this).html();
+        str=str.toLowerCase();
+        if(str == "daily"){
+            str = str+"/"+ticker;
+        }
+        console.log(str);
+        graphGen(str,false);
+    });
+</script>
+</body>
+</html>
