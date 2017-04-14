@@ -9,6 +9,7 @@ var session = require('express-session')
 var user=new db.User();
 var stock=new db.Stock();
 var watch=new db.Watch();
+var history=new db.History();
 var moment = require('moment');
 var port = process.env.PORT || 5000;
 var cheerio = require('cheerio');
@@ -124,18 +125,79 @@ app.post('/buy',function(req,res){
              user.findByUsername(acc,function(data){
                 var balance=parseFloat(data.balance);
                 if(price*qty > balance){
-                    message="You do not have sufficient balance";
+                    hold.status(500);
+                    hold.send("You do not have sufficient balance");
                 }else{
                     balance=balance-price*qty;
                     balance=parseFloat(balance).toFixed(2);
                     user.updateBalance(acc,balance);
                     var date=moment().format("YYYY-MM-DD HH:mm");
-                    console.log(date);
-                    console.log(balance);
-                    stock.create(ticker,acc,price,qty,date);
-                    message="Stocks bought successfully, your new balance is " + balance;
+                    history.create(ticker,acc,price,qty,date,"Bought");
+                    stock.findByUandS(acc,ticker,function(data){
+                        if(data == null){
+                            stock.create(acc,ticker,qty);
+                        }else{
+                            var cqty=data.quantity;
+                            qty=cqty+qty;
+                            stock.updateByUandS(acc,ticker,qty)
+                        }
+                    });
+                    hold.send("Stocks bought successfully, your new balance is " + balance);
                 }
-                hold.send(message);
+            });
+        });        
+    });
+    }).on('error', function(e){
+          console.log("Got an error: ", e);
+    });
+});
+
+app.post('/sell',function(req,res){
+    var qty=req.body.qty;
+    var ticker=req.body.ticker;
+    var acc=req.session.passport.user.username;     
+    qty=parseInt(qty);
+    var hold=res;
+    var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval=1min&apikey=1977';
+    http.get(url, function(res){
+        var body = '';
+        res.on('data', function(chunk){
+        body += chunk;
+    });
+    res.on('end', function(){
+        var tJson = JSON.parse(body);
+        fs.writeFileSync("temp/"+ticker+'.json', JSON.stringify(tJson));
+        var obj;
+        fs.readFile('temp/'+ticker+".json", 'utf8', function (err, data) {
+             if (err) throw err;
+             obj = JSON.parse(data);
+             var date=obj["Meta Data"]["3. Last Refreshed"];
+             obj=obj["Time Series (1min)"][date];
+             var price=obj["4. close"];
+             price=parseFloat(price);
+             user.findByUsername(acc,function(data){
+                var balance=parseFloat(data.balance);
+                balance=balance+price*qty;
+                balance=parseFloat(balance).toFixed(2);
+                stock.findByUandS(acc,ticker,function(data){
+                    if(data == null){
+                        hold.status(500);
+                        hold.send("You do not have stocks of this company");
+                    }else{
+                        user.updateBalance(acc,balance);
+                        var date=moment().format("YYYY-MM-DD HH:mm");
+                        history.create(ticker,acc,price,qty,date,"Sold");
+                        var cqty=data.quantity;
+                        if(qty > cqty){
+                            hold.status(500);
+                            hold.send("You do not have those many stocks to sell");
+                        }else{
+                            qty=cqty-qty;
+                            stock.updateByUandS(acc,ticker,qty);
+                            hold.send("Stocks sold successfully, your new balance is " + balance);
+                        }
+                    }
+                });
             });
         });        
     });
@@ -197,9 +259,62 @@ app.get('/ticker',function(req,res){
     res.send(ticker);
 });
 app.get('/loggedin',function(req,res){
-    var acc=req.session.passport.user.username;
-    res.render('profile',{acc:acc});
+    var acc=req.session.passport.user.username;  
+    var stocks={"stocks":[]};
+    stock.findByUsername(acc,function(users){
+        if(users == ""){
+            user.findByUsername(acc,function(users){
+                res.render('profile',{acc:acc,email:users.email,balance:users.balance,total: 0,stocks:stocks}); 
+            });   
+        }
+        var total=0;
+        for(var i=0;i < users.length;i++){
+            var ticker=users[i].ticker;
+            var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
+            writeStock(url,"daily/"+ticker);
+            var obj;
+            fs.readFile('daily/'+ticker+".json", 'utf8', function (err, data) {
+                  if (err) throw err;
+                  obj = JSON.parse(data);
+                  var symbol=obj["Meta Data"]["2. Symbol"]; 
+                  var date=obj["Meta Data"]["3. Last Refreshed"];
+                  obj=obj["Time Series (Daily)"];
+                  var count=0;
+                  var obj2;
+                  for(var date2 in obj){
+                      if(count == 1){
+                        obj2=obj[date2];
+                        break;
+                      }
+                      count+=1;
+                  }                  
+                  obj=obj[date];
+                  var up;
+                  if(obj['4. close'] > obj2['4. close']){
+                    up=true;
+                  }else{
+                    up=false;
+                  }
+                  stock.findByUandS(acc,symbol,obj['4. close'],function(data,price){
+                      total+=data.quantity;
+                      var stocker={"ticker":data.ticker,"quantity":data.quantity,"value":parseFloat(price*data.quantity).toFixed(2),"up": up};
+                      stocks["stocks"].push(stocker);
+                      if(i == users.length && symbol == ticker){
+                        user.findByUsername(acc,function(user){
+                            res.render('profile',{acc:acc,email:user.email,balance:user.balance,total: total,stocks:stocks}); 
+                        });            
+                      }
+                  });
+            });
+        }
+    });
 });
+app.get('/logout', function (req, res){
+  req.session.destroy(function (err) {
+    res.redirect('/');
+  });
+});
+
 app.post('/register',function(req,res){
     var uname=req.body.un;
     var eml=req.body.email;

@@ -116,24 +116,7 @@ $(document).ready(function(){
           .fail(function(response) {
             console.log(response.responseText);
           });
-    });
-    $(document).on('click', '.buys', function(){
-        var qty=$("#qty").val();
-        var price=$(".cl").html();
-        
-        if(price == ""){
-            alert("Price has not loaded yet, please try again after price loads");
-        }else{
-            $.post("/buy",{qty:qty,ticker:ticker,price:price}, function(data){
-                console.log(data);
-            }).done(function() {
-                alert( "User successfully created" );
-                })
-              .fail(function(response) {
-                console.log(response.responseText);
-              });
-          }
-    });   
+    });  
             
     var form=function(date,dformat){
         var formDate=moment(date).format(dformat);
@@ -146,13 +129,80 @@ $(document).ready(function(){
         return (curr-prev)/prev;
     }
     $('[data-toggle="tooltip"]').tooltip(); 
-    $('#popover').popover({ 
-    html : true,
-    title: function() {
-      return $("#popover-head").html();
-    },
-    content: function() {
-      return $("#popover-content").html();
-    }
-});
+    $('#popover1').popover({ 
+        html : true,
+        title: function() {
+          return $("#popover-head").html();
+        },
+        content: function() {
+          return $("#popover-content").html();
+        }
+    });
+    $(document).on('show.bs.popover', function() {
+        $('.popover').not(this).popover('hide');
+    });
+    $('#popover2').popover({ 
+        html : true,
+        title: function() {
+          return $("#popover-head2").html();
+        },
+        content: function() {
+          return $("#popover-content2").html();
+        }
+    });
+    $(document).on('click', '#buys', function(){
+        var qty=$("#qty").val();
+        var price=$(".cl").html();
+        
+        if(price == ""){
+            alert("Price has not loaded yet, please try again after price loads");
+        }else{
+            $.post("/buy",{qty:qty,ticker:ticker}, function(data){
+                alert(data);
+            }).fail(function(response) {
+                alert(response.responseText);
+              });
+          }
+    }); 
+    
+    $('.buymob').click(function(){
+        var qty=prompt("Enter number of stocks to buy: ");
+        var price=$(".cl").html();
+        if(price == ""){
+            alert("Price has not loaded yet, please try again after price loads");
+        }else{
+            $.post("/buy",{qty:qty,ticker:ticker,price:price}, function(data){
+                alert(data);
+            }).fail(function(response) {
+                alert(response.responseText);
+              });
+          }        
+    });
+    $(document).on('click', '#sells', function(){
+        var qty=$("#qtys").val();
+        var price=$(".cl").html();
+        if(price == ""){
+            alert("Price has not loaded yet, please try again after price loads");
+        }else{
+            $.post("/sell",{qty:qty,ticker:ticker}, function(data){
+                alert(data);
+            }).fail(function(response) {
+                alert(response.responseText);
+              });
+          }
+    }); 
+        
+    $('.sellmob').click(function(){
+        var qty=prompt("Enter number of stocks to sell: ");
+        var price=$(".cl").html();
+        if(price == ""){
+            alert("Price has not loaded yet, please try again after price loads");
+        }else{
+            $.post("/sell",{qty:qty,ticker:ticker}, function(data){
+                alert(data);
+            }).fail(function(response) {
+                alert(response.responseText);
+              });
+          }        
+    });
 });

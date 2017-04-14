@@ -22,9 +22,15 @@ var watchSchema = new Schema({
 var stockSchema = new Schema({
   ticker:{type: String, required: true},
   username: { type: String, required: true},
+  quantity: {type:Number,required:true}
+});
+var historySchema = new Schema({
+  ticker:{type: String, required: true},
+  username: { type: String, required: true},
   price: {type: Number,required:true},
   quantity: {type:Number,required:true},
-  pdate: {type: String, required:true}
+  pdate: {type: String, required:true},
+  bos: {type:String,required:true}
 });
 userSchema.methods.create = function(uname,pwd,eml,blnc){
     var temp = mongoose.model('User',userSchema)({
@@ -36,7 +42,6 @@ userSchema.methods.create = function(uname,pwd,eml,blnc){
     temp.save(function(err) {
       if (err) throw err;
     });
-    console.log(temp);
 }
 
 userSchema.methods.findByUsername = function(uname,callback){
@@ -56,7 +61,6 @@ userSchema.methods.findByEmail = function(eml,callback){
 userSchema.methods.printAllUsers = function(){
     this.model('User').find({}, function(err, users) {
       if (err) throw err;
-      console.log(users);
     });
 }
 
@@ -87,8 +91,6 @@ watchSchema.methods.create = function(tick,uname){
 watchSchema.methods.printAllUsers = function(){
     this.model('Watch').find({}, function(err, users) {
       if (err) throw err;
-
-      console.log(users);
     });
 }
 
@@ -117,13 +119,11 @@ watchSchema.methods.removeByUandS = function(uname,tick,callback){
       callback(user);
     });
 }
-stockSchema.methods.create = function(tick,uname,prce,qty,pdate){
+stockSchema.methods.create = function(uname,tick,qty){
     var temp = mongoose.model('Stock',stockSchema)({
       ticker:tick,
       username:uname,
-      price:prce,
-      quantity:qty,
-      pdate:pdate
+      quantity:qty
     });
     temp.save(function(err) {
       if (err) throw err;
@@ -132,7 +132,6 @@ stockSchema.methods.create = function(tick,uname,prce,qty,pdate){
 stockSchema.methods.printAllStocks = function(){
     this.model('Stock').find({}, function(err, users) {
       if (err) throw err;
-      console.log(users);
     });
 }
 stockSchema.methods.findByUsername = function(uname,callback){
@@ -141,18 +140,60 @@ stockSchema.methods.findByUsername = function(uname,callback){
       callback(user);
     });
 }
-stockSchema.methods.removeByUandS = function(uname,tick,callback){
+stockSchema.methods.findByUandS = function(uname,tick,price,callback){
+    this.model('Stock').findOne({ username: uname,ticker:tick }, function(err,user) {
+      if (err) throw err;
+      callback(user,price);
+    });
+}
+stockSchema.methods.updateByUandS = function(uname,tick,qty){
+    this.model('Stock').findOneAndUpdate({ username: uname,ticker:tick },{quantity:qty}, function(err) {
+      if (err) throw err;
+    });
+}
+stockSchema.methods.removeByUandS = function(uname,tick){
     this.model('Stock').findOneAndRemove({ username: uname,ticker:tick }, function(err) {
+      if (err) throw err;
+    });
+}
+historySchema.methods.create = function(tick,uname,prce,qty,pdate,bos){
+    var temp = mongoose.model('History',historySchema)({
+      ticker:tick,
+      username:uname,
+      price:prce,
+      quantity:qty,
+      pdate:pdate,
+      bos:bos
+    });
+    temp.save(function(err) {
+      if (err) throw err;
+    });
+}
+historySchema.methods.printAllStocks = function(){
+    this.model('History').find({}, function(err, users) {
+      if (err) throw err;
+    });
+}
+historySchema.methods.findByUsername = function(uname,callback){
+    this.model('History').find({ username: uname }, function(err, user) {
+      if (err) throw err;
+      callback(user);
+    });
+}
+historySchema.methods.findByUandS = function(uname,tick,callback){
+    this.model('History').find({ username: uname,ticker:tick }, function(err) {
       if (err) throw err;
       callback(user);
     });
 }
 var Stock = mongoose.model('Stock',stockSchema);
+var History = mongoose.model('History',historySchema);
 var User = mongoose.model('User', userSchema);
 var Watch=mongoose.model('Watch',watchSchema);
 module.exports = {
     User: User,
     Stock:Stock,
-    Watch:Watch 
+    Watch:Watch,
+    History:History
 };
 

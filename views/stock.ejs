@@ -40,7 +40,7 @@
     <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav boldem">
           <li><a href="#">Home</a></li>
-          <li><a href="#" class="converter"><span class="glyphicon glyphicon-usd"> </span>Converter</a></li>
+          <li><a href="currency" class="converter"><span class="glyphicon glyphicon-usd"> </span>Converter</a></li>
           <li><a href="watchlist">Watchlist</a></li>
         </ul>
         <form class="navbar-form navbar-left desksearch" method="POST" action="stocklogged">
@@ -54,8 +54,8 @@
           </div>
         </form>
         <ul class="nav navbar-nav boldem navbar-right">
-            <li class="active"><a href="#"><span class="glyphicon glyphicon-user"> </span><span id="acc"><%= acc %></span></a></li>
-            <li><a href="#" class="logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+            <li><a href="loggedin"><span class="glyphicon glyphicon-user"> </span><span id="acc"><%= acc %></span></a></li>
+            <li><a href="logout" class="logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
         </ul>
     </div>
   </div>
@@ -75,13 +75,23 @@
             <li class="text ib ibdesk ibcl ibcldesk">1</li>
             <li class="text graph icdesk"><i class="fa fa-line-chart"></i></li>
             <li class="text buy iddesk">
-                <a href="#" id="popover" data-placement="bottom">Buy</a>
+                <a href="#" id="popover1" data-placement="bottom">Buy</a>
                 <div id="popover-head" class="hide">
                   Buy Stock
                 </div>
                 <div id="popover-content" class="hide" style="color:black">
                   Quantity: <input type="text" id="qty" name="qty">
-                  <button type="button" class="buys" id="buys">Buy</button>
+                  <button type="button" id="buys">Buy</button>
+                </div>
+            </li>
+            <li class="text sell iddesk">
+                <a href="#" id="popover2" data-placement="bottom">Sell</a>
+                <div id="popover-head2" class="hide">
+                  Sell Stock
+                </div>
+                <div id="popover-content2" class="hide" style="color:black">
+                  Quantity: <input type="text" id="qtys" name="qty">
+                  <button type="button" id="sells">Sell</button>
                 </div>
             </li>
             <li class="text watch iddesk" style="border-right:0;">Watch</li>
@@ -102,7 +112,8 @@
                 <li class="text ib ibcl ibmob">1</li>
                 <li class="divider"></li>                
                 <li class="text graph ic ibmob">Graph</li>
-                <li class="text buy id ibmob">Buy</li>
+                <li class="text buy id ibmob buymob">Buy</li>
+                <li class="text sell id ibmob sellmob">Sell</li>
                 <li class="text watch id ibmob" style="border-right:0;">Watch</li>
             </ul>
         </div>

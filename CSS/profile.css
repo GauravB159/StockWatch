@@ -207,7 +207,13 @@ table {
 
 .overflow {
   overflow-y: scroll;
+  width: 100%;
   height: 420px; }
+  .overflow table td {
+    height: 80px; }
+
+.otable {
+  table-layout: fixed; }
 
 .red {
   color: red; }

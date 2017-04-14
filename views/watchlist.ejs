@@ -32,9 +32,9 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav boldem">
-          <li><a href="#">Home</a></li>
-          <li><a href="#" class="converter"><span class="glyphicon glyphicon-usd"> </span>Converter</a></li>
-          <li><a href="#">Watchlist</a></li>
+          <li><a href="#">History</a></li>
+          <li><a href="currency" class="converter"><span class="glyphicon glyphicon-usd"> </span>Converter</a></li>
+          <li class="active"><a href="#">Watchlist</a></li>
         </ul>
         <form id="tck" action="stocklogged" method="POST">
               <input type="hidden" name="ticker" id="hold">
@@ -50,8 +50,8 @@
           </div>
         </form>
         <ul class="nav navbar-nav boldem navbar-right">
-            <li class="active"><a href="#"><span class="glyphicon glyphicon-user"> </span><span id="acc"><%= acc %></span></a></li>
-            <li><a href="#" class="logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+            <li><a href="loggedin"><span class="glyphicon glyphicon-user"> </span><span id="acc"><%= acc %></span></a></li>
+            <li><a href="logout" class="logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
         </ul>
     </div>
   </div>

@@ -152,7 +152,7 @@ td{
     font-size:18px;
     font-weight:700;    
 }
-#qty{
+#qty,#qtys{
     color:black;
     font-weight:700;
 }
@@ -160,11 +160,11 @@ td{
     border-radius:0;
     background-color:rgba(0,0,0,0.8);
 }
-#buys{
+#buys,#sells{
     margin-top:10px;
     background-color:rgba(0,0,0,0.9);
 }   
-#popover{
+#popover1,#popover2{
     text-decoration:none;
     color:white;
 }

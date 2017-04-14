@@ -32,8 +32,8 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav boldem">
-          <li><a href="#">Home</a></li>
-          <li><a href="#" class="converter"><span class="glyphicon glyphicon-usd"> </span>Converter</a></li>
+          <li><a href="#">History</a></li>
+          <li><a href="currency" class="converter"><span class="glyphicon glyphicon-usd"> </span>Converter</a></li>
           <li><a href="watchlist">Watchlist</a></li>
         </ul>
         <form class="navbar-form navbar-left desksearch" method="POST" action="stocklogged">
@@ -48,7 +48,7 @@
         </form>
         <ul class="nav navbar-nav boldem navbar-right">
             <li class="active"><a href="#"><span class="glyphicon glyphicon-user"> </span><span id="acc"><%= acc %></span></a></li>
-            <li><a href="#" class="logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+            <li><a href="logout" class="logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
         </ul>
     </div>
   </div>
@@ -58,24 +58,24 @@
         <div class="col-sm-6 details">
             <table class="text table-condensed" border=1>
                 <tr>
-                    <td>Full name: </td>
-                    <td class="data"></td>
+                    <td>Username: </td>
+                    <td class="data"><%= acc %></td>
                 </tr>
                 <tr>
                     <td>Email: </td>
-                    <td class="data"><span></span></td>
+                    <td class="data"><span><%= email %></span></td>
                 </tr>
                 <tr>
-                    <td>Phone Number: </td>
-                    <td class="data"><span> </td>
+                    <td>Balance: </td>
+                    <td class="data"><span><%= balance %></td>
                 </tr>
                 <tr>
                     <td>Rank: </td>
                     <td class="data"><span> </td>
                 </tr>
                 <tr>
-                    <td>Balance: </td>
-                    <td class="data"><span> </td>
+                    <td>Total stocks: </td>
+                    <td class="data"><span><%= total %></td>
                 </tr>
             </table>
         </div>
@@ -84,36 +84,23 @@
                 <tr>
                     <td class="data">Ticker</td>
                     <td class="data">Quantity</td>
-                    <td class="data">Value</td>
+                    <td class="data">Total Value</td>
                 </tr>
             </table>
             <div class="overflow">
                 <table class="text table-condensed otable" border=1>
-                    <tr class="green">
-                        <td class="data">AAPL</td>
-                        <td class="data">10</td>
-                        <td class="data">15</td>
-                    </tr>
-                    <tr class="red">
-                        <td class="data">NTDOY</td>
-                        <td class="data">20</td>
-                        <td class="data">30</td>
-                    </tr>
-                    <tr class="red">
-                        <td class="data">MSFT</td>
-                        <td class="data">40</td>
-                        <td class="data">50</td>
-                    </tr>
-                    <tr class="green">
-                        <td class="data">FB</td>
-                        <td class="data">60</td>
-                        <td class="data">70</td>
-                    </tr>
-                    <tr class="green">
-                        <td class="data">FB</td>
-                        <td class="data">60</td>
-                        <td class="data">70</td>
-                    </tr>
+                        <%var stock=stocks["stocks"];
+                        for(var i=0; i < stock.length; i++) { %>
+                            <% if(stock[i].up == true){ %>
+                                <tr class="green">
+                            <% }else{ %>
+                                <tr class="red">
+                            <% } %>
+                            <td><%= stock[i].ticker %></td>
+                            <td><%= stock[i].quantity %></td>
+                            <td><%= stock[i].value %></td>
+                        </tr>
+                    <% } %>
                 </table>
             </div>
         </div>
