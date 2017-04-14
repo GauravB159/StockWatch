@@ -27,7 +27,6 @@ app.use(passport.session());
 new CronJob('30 * * * * *', function() {
   console.log('You will see this message every second');
 }, null, true);*/
-watch.printAllUsers();
 var interval=60;
 function writeStock(url,name){
 http.get(url, function(res){
@@ -76,13 +75,11 @@ app.post('/stock', function(req, res){
 });
 app.post('/stocklogged', function(req, res){
     ticker=req.body.ticker;
-    console.log(ticker);
     var acc=req.session.passport.user.username;    
     res.render('stock',{acc:acc});
 });
 app.get('/stocklogged', function(req, res){
     ticker=req.body.ticker;
-        console.log(ticker);
     var acc=req.session.passport.user.username;    
     res.render('stock',{acc:acc});
 });
@@ -105,6 +102,9 @@ app.get('/watchlist',function(req,res,next){
     var up={"stocks":[]};
     var down={"stocks":[]};        
     watch.findByUsername(acc,function(user){
+        if(user == ""){
+            res.render('watchlist',{acc:acc,up:up,down:down});    
+        }
         for(var i=0;i < user.length;i++){
             var ticker=user[i].ticker;
             var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
