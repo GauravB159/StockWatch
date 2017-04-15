@@ -113,10 +113,15 @@ watchSchema.methods.findByTicker = function(tick,callback){
       callback(user);
     });
 }
-watchSchema.methods.removeByUandS = function(uname,tick,callback){
-    this.model('Watch').findOneAndRemove({ username: uname,ticker:tick }, function(err) {
+watchSchema.methods.findByUandS = function(uname,tick,callback){
+    this.model('Watch').findOne({ username: uname,ticker:tick }, function(err,user) {
       if (err) throw err;
       callback(user);
+    });
+}
+watchSchema.methods.removeByUandS = function(uname,tick){
+    this.model('Watch').findOneAndRemove({ username: uname,ticker:tick }, function(err) {
+      if (err) throw err;
     });
 }
 stockSchema.methods.create = function(uname,tick,qty){

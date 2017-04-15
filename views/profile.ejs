@@ -36,6 +36,9 @@
           <li><a href="currency" class="converter"><span class="glyphicon glyphicon-usd"> </span>Converter</a></li>
           <li><a href="watchlist">Watchlist</a></li>
         </ul>
+        <form id="tck" action="stocklogged" method="POST">
+              <input type="hidden" name="ticker" id="hold">
+        </form>
         <form class="navbar-form navbar-left desksearch" method="POST" action="stocklogged">
           <div class="input-group">
             <input type="text" class="form-control formers" name="ticker" placeholder="Search a Stock eg. GOOG">
@@ -96,7 +99,7 @@
                             <% }else{ %>
                                 <tr class="red">
                             <% } %>
-                            <td><%= stock[i].ticker %></td>
+                            <td class="tick"><%= stock[i].ticker %></td>
                             <td><%= stock[i].quantity %></td>
                             <td><%= stock[i].value %></td>
                         </tr>
@@ -106,6 +109,7 @@
         </div>
     </div>
 </div>
+  <script src="../JS/profile.js"></script>
 </body>
 </html>
 

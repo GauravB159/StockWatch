@@ -94,7 +94,13 @@
                   <button type="button" id="sells">Sell</button>
                 </div>
             </li>
-            <li class="text watch iddesk" style="border-right:0;">Watch</li>
+            <% if(watching == false){ %>
+                <li class="text watch iddesk" style="border-right:0;">Watch</li>
+                <li class="text unwatch iddesk hide" style="border-right:0;">Unwatch</li>
+            <% }else{ %>
+                <li class="text watch iddesk hide" style="border-right:0;">Watch</li>
+                <li class="text unwatch iddesk" style="border-right:0;">Unwatch</li>
+            <% } %>
         </div>
         <div class="dropdown mob"> 
             <li class="ticker text"></li>
@@ -114,7 +120,11 @@
                 <li class="text graph ic ibmob">Graph</li>
                 <li class="text buy id ibmob buymob">Buy</li>
                 <li class="text sell id ibmob sellmob">Sell</li>
-                <li class="text watch id ibmob" style="border-right:0;">Watch</li>
+                <% if(watching == false){ %>
+                    <li class="text watch id ibmob" style="border-right:0;">Watch</li>
+                <% }else{ %>
+                    <li class="text unwatch id ibmob" style="border-right:0;">Unwatch</li>
+                <% } %>
             </ul>
         </div>
         

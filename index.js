@@ -77,14 +77,32 @@ app.post('/stock', function(req, res){
 });
 app.post('/stocklogged', function(req, res){
     ticker=req.body.ticker;
-    var acc=req.session.passport.user.username;    
-    res.render('stock',{acc:acc});
+    var acc=req.session.passport.user.username;
+    watch.findByUandS(acc,ticker,function(data){
+        var watching;
+        console.log(data);
+        if(data == null){
+            watching = false;
+        }else{
+            watching = true;
+        }
+        res.render('stock',{acc:acc,watching:watching});
+    });
 });
-app.get('/stocklogged', function(req, res){
+/*app.get('/stocklogged', function(req, res){
     ticker=req.body.ticker;
-    var acc=req.session.passport.user.username;    
-    res.render('stock',{acc:acc});
-});
+    var acc=req.session.passport.user.username;
+    watch.findByUandS(acc,ticker,function(data){
+        var watching;
+        if(data == null){
+            watching = false;
+        }else{
+            watching = true;
+        }
+        res.render('stock',{acc:acc,watching:watching});
+    });
+
+});*/
 app.get('/chart', function(req, res){
     res.sendFile('chart.html', { root: __dirname} );
 });
@@ -97,7 +115,13 @@ app.post('/watch',function(req,res){
     var acc=req.session.passport.user.username;
     var ticker=req.body.ticker;
     watch.create(ticker,acc);
-    res.send("Stock added to watchlist");
+    res.render('stock',{acc:acc,watching:true});
+});
+app.post('/unwatch',function(req,res){
+    var acc=req.session.passport.user.username;
+    var ticker=req.body.ticker;
+    watch.removeByUandS(acc,ticker);
+    res.render('stock',{acc:acc,watching:false});
 });
 app.post('/buy',function(req,res){
     var qty=req.body.qty;
@@ -152,6 +176,21 @@ app.post('/buy',function(req,res){
     });
 });
 
+var raw=function(url,reso,runthis){
+    http.get(url, function(res){
+        var body = '';
+        res.on('data', function(chunk){
+        body += chunk;
+    });
+    res.on('end', function(){
+        var tJson = JSON.parse(body);
+        fs.writeFileSync(name+'.json', JSON.stringify(tJson));
+    });
+
+    }).on('error', function(e){
+          console.log("Got an error: ", e);
+    });
+}
 app.post('/sell',function(req,res){
     var qty=req.body.qty;
     var ticker=req.body.ticker;
@@ -212,46 +251,47 @@ app.get('/watchlist',function(req,res,next){
     watch.findByUsername(acc,function(user){
         if(user == ""){
             res.render('watchlist',{acc:acc,up:up,down:down});    
-        }
-        for(var i=0;i < user.length;i++){
-            var ticker=user[i].ticker;
-            var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
-            writeStock(url,"daily/"+ticker);
-            var obj;
-            fs.readFile('daily/'+ticker+".json", 'utf8', function (err, data) {
-                  if (err) throw err;
-                  obj = JSON.parse(data);
-                  var symbol=obj["Meta Data"]["2. Symbol"]; 
-                  var date=obj["Meta Data"]["3. Last Refreshed"];
-                  obj=obj["Time Series (Daily)"];
-                  var count=0;
-                  var obj2;
-                  for(var date2 in obj){
-                      if(count == 1){
-                        obj2=obj[date2];
-                        break;
+        }else{
+            for(var i=0;i < user.length;i++){
+                var ticker=user[i].ticker;
+                var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
+                writeStock(url,"daily/"+ticker);
+                var obj;
+                fs.readFile('daily/'+ticker+".json", 'utf8', function (err, data) {
+                      if (err) throw err;
+                      obj = JSON.parse(data);
+                      var symbol=obj["Meta Data"]["2. Symbol"]; 
+                      var date=obj["Meta Data"]["3. Last Refreshed"];
+                      obj=obj["Time Series (Daily)"];
+                      var count=0;
+                      var obj2;
+                      for(var date2 in obj){
+                          if(count == 1){
+                            obj2=obj[date2];
+                            break;
+                          }
+                          count+=1;
+                      }                  
+                      obj=obj[date];
+                      ud=[];
+                      for(var price in obj){
+                          if(obj[price]-obj2[price] > 0){
+                              ud.push(true);  
+                          }else{
+                              ud.push(false);
+                          }
                       }
-                      count+=1;
-                  }                  
-                  obj=obj[date];
-                  ud=[];
-                  for(var price in obj){
-                      if(obj[price]-obj2[price] > 0){
-                          ud.push(true);  
+                      var stock={"ticker":symbol,"open":{"data":parseFloat(obj['1. open']).toFixed(2),"ud":ud[0]},"close":{"data":parseFloat(obj['4. close']).toFixed(2),"ud":ud[3]},"high":{"data":parseFloat(obj['2. high']).toFixed(2),"ud":ud[1]},"low":{"data":parseFloat(obj['3. low']).toFixed(2),"ud":ud[2]}};
+                      if(ud[3] == true){
+                          up["stocks"].push(stock);
                       }else{
-                          ud.push(false);
+                          down["stocks"].push(stock);
                       }
-                  }
-                  var stock={"ticker":symbol,"open":{"data":parseFloat(obj['1. open']).toFixed(2),"ud":ud[0]},"close":{"data":parseFloat(obj['4. close']).toFixed(2),"ud":ud[3]},"high":{"data":parseFloat(obj['2. high']).toFixed(2),"ud":ud[1]},"low":{"data":parseFloat(obj['3. low']).toFixed(2),"ud":ud[2]}};
-                  if(ud[3] == true){
-                      up["stocks"].push(stock);
-                  }else{
-                      down["stocks"].push(stock);
-                  }
-                  if(i == user.length && symbol == ticker){
-                      res.render('watchlist',{acc:acc,up:up,down:down});             
-                  }
-            });
+                      if(i == user.length && symbol == ticker){
+                          res.render('watchlist',{acc:acc,up:up,down:down});             
+                      }
+                });
+            }
         }
     });
 });

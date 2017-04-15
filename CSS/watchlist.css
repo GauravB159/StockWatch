@@ -205,6 +205,9 @@ table {
   border: none;
   width: 97.2%; }
 
+.tick {
+  cursor: pointer; }
+
 .overflow {
   overflow-y: scroll;
   width: 100%;

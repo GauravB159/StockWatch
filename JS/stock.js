@@ -109,15 +109,22 @@ $(document).ready(function(){
     }
     $(".watch").click(function(){
         $.post("/watch",{ticker:ticker}, function(data){
-            console.log(data);
-        }).done(function() {
-            alert( "User successfully created" );
-            })
-          .fail(function(response) {
-            console.log(response.responseText);
+            $(".watch").toggleClass("hide");
+            $(".unwatch").toggleClass("hide");
+            alert( "Stock added to watchlist" );
+        }).fail(function(response) {
+            alert(response.responseText);
           });
     });  
-            
+    $(".unwatch").click(function(){
+        $.post("/unwatch",{ticker:ticker}, function(data){
+            $(".watch").toggleClass("hide");
+            $(".unwatch").toggleClass("hide");
+            alert("Stock removed from watchlist");
+        }).fail(function(response) {
+            alert(response.responseText);
+          });
+    });        
     var form=function(date,dformat){
         var formDate=moment(date).format(dformat);
         return formDate;

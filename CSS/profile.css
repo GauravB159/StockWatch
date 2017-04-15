@@ -212,6 +212,9 @@ table {
   .overflow table td {
     height: 80px; }
 
+.tick {
+  cursor: pointer; }
+
 .otable {
   table-layout: fixed; }
 
