@@ -5,6 +5,7 @@ var $=require("jquery");
 var app = express();
 var fs = require('fs');
 var db = require('./db');
+var nodemailer = require('nodemailer');
 var session = require('express-session')
 var user=new db.User();
 var stock=new db.Stock();
@@ -16,6 +17,7 @@ var cheerio = require('cheerio');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
+
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(bodyParser.json());
 app.use(session({
@@ -23,12 +25,82 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'gpunjabi28@gmail.com',
+        pass: 'gbgbgb123'
+    }
+});
+
 app.use(passport.initialize());
 app.use(passport.session());
-/*var CronJob = require('cron').CronJob;
-new CronJob('30 * * * * *', function() {
-  console.log('You will see this message every second');
-}, null, true);*/
+var CronJob = require('cron').CronJob;
+new CronJob('* */1 * * * *', function() {
+    var tickers=["XELB"];
+    for(ticker in tickers){
+        var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+tickers[ticker]+'&interval=1min&apikey=1977';
+        http.get(url, function(res){
+            var body = '';
+            res.on('data', function(chunk){
+                body += chunk;
+            });
+            res.on('end', function(){
+                var tJson = JSON.parse(body);
+                fs.writeFileSync("temp/"+ticker+'.json', JSON.stringify(tJson));
+                var obj;
+                fs.readFile('temp/'+ticker+".json", 'utf8', function (err, data) {
+                    if (err) throw err;
+                    obj = JSON.parse(data);
+                    var date=obj["Meta Data"]["3. Last Refreshed"];
+                    var symbol=obj["Meta Data"]["2. Symbol"];
+                    var store=parseInt(moment(date).format("DD"));
+                    obj=obj["Time Series (1min)"];
+                    var obj2=obj[date];
+                    var price=obj2["4. close"];
+                    price=parseFloat(price);
+                    for(date in obj){
+                        var check=parseInt(moment(date).format("DD"));
+                        if(store - check == 1 || store - check == 3){
+                            var price2=parseFloat(obj[date]["4. close"]);
+                            var perc=(100)*(price-price2)/price2;
+                            if(perc >= 2.0 || (-1*perc) >= 2.0){
+                                var uod;
+                                if(perc <= -2.0){
+                                    uod="down";
+                                }else{
+                                    uod="up";
+                                }
+                                var message='Your stock given by ticker '+symbol+'has gone '+uod+' by '+perc+' percent.';    
+                                watch.findByTicker(symbol,function(data){
+                                    for(users in data){
+                                        user.findByUsername(data[users].username,function(data){    
+                                            let mailOptions = {
+                                                from: '"Gaurav" <gbolosta@gmail.com>', 
+                                                to: data.email,
+                                                subject: 'Stock fluctuation', 
+                                                text: message
+                                            };
+                                            transporter.sendMail(mailOptions,function(error, info){
+                                                if (error) {
+                                                    console.log(error);
+                                                }
+                                            });
+                                        });
+                                    }
+                                });
+                            }
+                            break;
+                        }
+                    }
+                });        
+            });
+        }).on('error', function(e){
+        console.log("Got an error: ", e);
+        });
+    }
+}, null, true,'America/New_York');
 var interval=60;
 function writeStock(url,name){
 http.get(url, function(res){

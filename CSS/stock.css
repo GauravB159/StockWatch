@@ -28,6 +28,9 @@ body {
   .navbar * {
     color: white; }
 
+.navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse {
+  max-height: 460px; }
+
 .nav.navbar-nav li a {
   color: white; }
 
@@ -78,6 +81,9 @@ body {
 
 .mobsearch {
   display: none; }
+
+.navbar-collapse {
+  padding-bottom: 60px; }
 
 @media screen and (max-width: 930px) {
   .navbar-header {
