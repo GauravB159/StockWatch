@@ -10,7 +10,7 @@ var user=new db.User();
 var stock=new db.Stock();
 var watch=new db.Watch();
 var history=new db.History();
-var moment = require('moment');
+var moment = require('moment-timezone');
 var port = process.env.PORT || 5000;
 var cheerio = require('cheerio');
 var passport = require('passport');
@@ -80,7 +80,6 @@ app.post('/stocklogged', function(req, res){
     var acc=req.session.passport.user.username;
     watch.findByUandS(acc,ticker,function(data){
         var watching;
-        console.log(data);
         if(data == null){
             watching = false;
         }else{
@@ -89,7 +88,7 @@ app.post('/stocklogged', function(req, res){
         res.render('stock',{acc:acc,watching:watching});
     });
 });
-/*app.get('/stocklogged', function(req, res){
+app.get('/stocklogged', function(req, res){
     ticker=req.body.ticker;
     var acc=req.session.passport.user.username;
     watch.findByUandS(acc,ticker,function(data){
@@ -102,7 +101,7 @@ app.post('/stocklogged', function(req, res){
         res.render('stock',{acc:acc,watching:watching});
     });
 
-});*/
+});
 app.get('/chart', function(req, res){
     res.sendFile('chart.html', { root: __dirname} );
 });
@@ -110,6 +109,12 @@ app.get('/currency', function(req, res){
     var url="http://api.fixer.io/latest?base=USD";
     writeStock(url,"currency");    
     res.sendFile('currency.html', { root: __dirname} );
+});
+app.get('/currencylogged', function(req, res){
+    var url="http://api.fixer.io/latest?base=USD";
+    writeStock(url,"currency");    
+    var acc=req.session.passport.user.username;
+    res.render('currency',{acc:acc});
 });
 app.post('/watch',function(req,res){
     var acc=req.session.passport.user.username;
@@ -123,126 +128,131 @@ app.post('/unwatch',function(req,res){
     watch.removeByUandS(acc,ticker);
     res.render('stock',{acc:acc,watching:false});
 });
+var timeCheck = function(){
+    var time = parseInt(moment().tz("America/New_York").format("HH"));
+    var time2 = parseInt(moment().tz("America/New_York").format("mm"));
+    var time3 = parseInt(moment().tz("America/New_York").format("d"));
+    if((time >= 9 && time2 >= 30) && (time <= 16 && time2 <= 0) && (time3 % 6 != 0)){
+        return true;
+    }else{
+        return false;
+    }
+}
 app.post('/buy',function(req,res){
     var qty=req.body.qty;
     var ticker=req.body.ticker;
     var acc=req.session.passport.user.username;     
     qty=parseInt(qty);
     var hold=res;
-    var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval=1min&apikey=1977';
-    http.get(url, function(res){
-        var body = '';
-        res.on('data', function(chunk){
-        body += chunk;
-    });
-    res.on('end', function(){
-        var tJson = JSON.parse(body);
-        fs.writeFileSync("temp/"+ticker+'.json', JSON.stringify(tJson));
-        var obj;
-        fs.readFile('temp/'+ticker+".json", 'utf8', function (err, data) {
-             if (err) throw err;
-             obj = JSON.parse(data);
-             var date=obj["Meta Data"]["3. Last Refreshed"];
-             obj=obj["Time Series (1min)"][date];
-             var price=obj["4. close"];
-             price=parseFloat(price);
-             user.findByUsername(acc,function(data){
-                var balance=parseFloat(data.balance);
-                if(price*qty > balance){
-                    hold.status(305);
-                    hold.send("You do not have sufficient balance");
-                }else{
-                    balance=balance-price*qty;
-                    balance=parseFloat(balance).toFixed(2);
-                    user.updateBalance(acc,balance);
-                    var date=moment().format("YYYY-MM-DD HH:mm");
-                    history.create(ticker,acc,price,qty,date,"Bought");
-                    stock.findByUandS(acc,price,obj['close'],function(data,price){
-                        if(data == null){
-                            stock.create(acc,ticker,qty);
-                        }else{
-                            var cqty=data.quantity;
-                            qty=cqty+qty;
-                            stock.updateByUandS(acc,ticker,qty)
-                        }
-                    });
-                    hold.send("Stocks bought successfully, your new balance is " + balance);
-                }
-            });
-        });        
-    });
-    }).on('error', function(e){
-          console.log("Got an error: ", e);
-    });
+    var check = timeCheck();
+    if(check == false){
+        hold.send("The stock market is closed, please buy when it opens");
+    }else{
+        var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval=1min&apikey=1977';
+        http.get(url, function(res){
+            var body = '';
+            res.on('data', function(chunk){
+            body += chunk;
+        });
+        res.on('end', function(){
+            var tJson = JSON.parse(body);
+            fs.writeFileSync("temp/"+ticker+'.json', JSON.stringify(tJson));
+            var obj;
+            fs.readFile('temp/'+ticker+".json", 'utf8', function (err, data) {
+                 if (err) throw err;
+                 obj = JSON.parse(data);
+                 var date=obj["Meta Data"]["3. Last Refreshed"];
+                 obj=obj["Time Series (1min)"][date];
+                 var price=obj["4. close"];
+                 price=parseFloat(price);
+                 user.findByUsername(acc,function(data){
+                    var balance=parseFloat(data.balance);
+                    if(price*qty > balance){
+                        hold.status(305);
+                        hold.send("You do not have sufficient balance");
+                    }else{
+                        balance=balance-price*qty;
+                        balance=parseFloat(balance).toFixed(2);
+                        user.updateBalance(acc,balance);
+                        var date=moment().format("YYYY-MM-DD HH:mm");
+                        history.create(ticker,acc,price,qty,date,"Bought");
+                        stock.findByUandS(acc,price,obj['close'],function(data,price){
+                            if(data == null){
+                                stock.create(acc,ticker,qty);
+                            }else{
+                                var cqty=data.quantity;
+                                qty=cqty+qty;
+                                stock.updateByUandS(acc,ticker,qty)
+                            }
+                        });
+                        hold.send("Stocks bought successfully, your new balance is " + balance);
+                    }
+                });
+            });        
+        });
+        }).on('error', function(e){
+              console.log("Got an error: ", e);
+        });
+    }
 });
 
-var raw=function(url,reso,runthis){
-    http.get(url, function(res){
-        var body = '';
-        res.on('data', function(chunk){
-        body += chunk;
-    });
-    res.on('end', function(){
-        var tJson = JSON.parse(body);
-        fs.writeFileSync(name+'.json', JSON.stringify(tJson));
-    });
-
-    }).on('error', function(e){
-          console.log("Got an error: ", e);
-    });
-}
 app.post('/sell',function(req,res){
     var qty=req.body.qty;
     var ticker=req.body.ticker;
     var acc=req.session.passport.user.username;     
     qty=parseInt(qty);
     var hold=res;
-    var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval=1min&apikey=1977';
-    http.get(url, function(res){
-        var body = '';
-        res.on('data', function(chunk){
-        body += chunk;
-    });
-    res.on('end', function(){
-        var tJson = JSON.parse(body);
-        fs.writeFileSync("temp/"+ticker+'.json', JSON.stringify(tJson));
-        var obj;
-        fs.readFile('temp/'+ticker+".json", 'utf8', function (err, data) {
-             if (err) throw err;
-             obj = JSON.parse(data);
-             var date=obj["Meta Data"]["3. Last Refreshed"];
-             obj=obj["Time Series (1min)"][date];
-             var price=obj["4. close"];
-             price=parseFloat(price);
-             user.findByUsername(acc,function(data){
-                var balance=parseFloat(data.balance);
-                balance=balance+price*qty;
-                balance=parseFloat(balance).toFixed(2);
-                stock.findByUandS(acc,ticker,obj['4. close'],function(data,price){
-                    if(data == null){
-                        hold.status(305);
-                        hold.send("You do not have stocks of this company");
-                    }else{
-                        user.updateBalance(acc,balance);
-                        var date=moment().format("YYYY-MM-DD HH:mm");
-                        history.create(ticker,acc,price,qty,date,"Sold");
-                        var cqty=data.quantity;
-                        if(qty > cqty){
+    var check = timeCheck();
+    if(check == false){
+        hold.send("The stock market is closed, please sell when it opens");
+    }else{
+        var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval=1min&apikey=1977';
+        http.get(url, function(res){
+            var body = '';
+            res.on('data', function(chunk){
+            body += chunk;
+        });
+        res.on('end', function(){
+            var tJson = JSON.parse(body);
+            fs.writeFileSync("temp/"+ticker+'.json', JSON.stringify(tJson));
+            var obj;
+            fs.readFile('temp/'+ticker+".json", 'utf8', function (err, data) {
+                 if (err) throw err;
+                 obj = JSON.parse(data);
+                 var date=obj["Meta Data"]["3. Last Refreshed"];
+                 obj=obj["Time Series (1min)"][date];
+                 var price=obj["4. close"];
+                 price=parseFloat(price);
+                 user.findByUsername(acc,function(data){
+                    var balance=parseFloat(data.balance);
+                    balance=balance+price*qty;
+                    balance=parseFloat(balance).toFixed(2);
+                    stock.findByUandS(acc,ticker,obj['4. close'],function(data,price){
+                        if(data == null){
                             hold.status(305);
-                            hold.send("You do not have those many stocks to sell");
+                            hold.send("You do not have stocks of this company");
                         }else{
-                            qty=cqty-qty;
-                            stock.updateByUandS(acc,ticker,qty);
-                            hold.send("Stocks sold successfully, your new balance is " + balance);
+                            user.updateBalance(acc,balance);
+                            var date=moment().format("YYYY-MM-DD HH:mm");
+                            history.create(ticker,acc,price,qty,date,"Sold");
+                            var cqty=data.quantity;
+                            if(qty > cqty){
+                                hold.status(305);
+                                hold.send("You do not have those many stocks to sell");
+                            }else{
+                                qty=cqty-qty;
+                                stock.updateByUandS(acc,ticker,qty);
+                                hold.send("Stocks sold successfully, your new balance is " + balance);
+                            }
                         }
-                    }
+                    });
                 });
-            });
-        });        
-    });
-    }).on('error', function(e){
-          console.log("Got an error: ", e);
-    });
+            });        
+        });
+        }).on('error', function(e){
+              console.log("Got an error: ", e);
+        });
+    }
 });
 app.get('/watchlist',function(req,res,next){
     var acc=req.session.passport.user.username;  

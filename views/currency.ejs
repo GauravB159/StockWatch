@@ -21,7 +21,7 @@
             <span class="icon-bar"></span>                        
         </button>
       <a class="navbar-brand" href="#">StockWatch</a>
-      <form class="navbar-form navbar-left mobsearch" method="POST" action="stock">
+      <form class="navbar-form navbar-left mobsearch" method="POST" action="stocklogged">
           <div class="input-group">
             <input type="text" class="form-control formers" name="ticker" placeholder="Search a Stock eg. GOOG">
             <div class="input-group-btn">
@@ -34,10 +34,11 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav boldem">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="currency" class="converter"><span class="glyphicon glyphicon-usd"> </span>Converter</a></li>
+          <li><a href="#">Home</a></li>
+          <li class="acti"><a href="#" class="converter"><span class="glyphicon glyphicon-usd"> </span>Converter</a></li>
+          <li><a href="watchlist">Watchlist</a></li>
         </ul>
-        <form class="navbar-form navbar-left desksearch" method="POST" action="stock">
+        <form class="navbar-form navbar-left desksearch" method="POST" action="stocklogged">
           <div class="input-group">
             <input type="text" class="form-control formers" name="ticker" placeholder="Search a Stock eg. GOOG">
             <div class="input-group-btn">
@@ -47,6 +48,10 @@
             </div>
           </div>
         </form>
+        <ul class="nav navbar-nav boldem navbar-right">
+            <li><a href="loggedin"><span class="glyphicon glyphicon-user"> </span><span id="acc"><%= acc %></span></a></li>
+            <li><a href="logout" class="logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+        </ul>
     </div>
   </div>
 </nav>

@@ -40,7 +40,7 @@
     <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav boldem">
           <li><a href="#">Home</a></li>
-          <li><a href="currency" class="converter"><span class="glyphicon glyphicon-usd"> </span>Converter</a></li>
+          <li><a href="currencylogged" class="converter"><span class="glyphicon glyphicon-usd"> </span>Converter</a></li>
           <li><a href="watchlist">Watchlist</a></li>
         </ul>
         <form class="navbar-form navbar-left desksearch" method="POST" action="stocklogged">
@@ -168,6 +168,7 @@
     </div>
 </div>
 </div>
+<script src="../JS/navbar.js"></script>
 <script>
     var lastmin;
     $.get('/ticker',function(data){
@@ -276,7 +277,9 @@
         $('.bod').toggleClass("hidden");
         $('.sh').toggleClass("hidden");
         $('.watch').toggleClass("hidden");
-        $('.buy').toggleClass("hidden");    
+        $('.buy').toggleClass("hidden");  
+        $('.sell').toggleClass("hidden");  
+        $('.unwatch').toggleClass("hidden");        
         $('.char').toggleClass("hidden");
         if($('.ibcl').hasClass("checker") && !(lastmin.hasClass("acti"))){
             $('.ib').removeClass("acti");
