@@ -29,15 +29,15 @@ app.use(session({
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'gpunjabi28@gmail.com',
-        pass: 'gbgbgb123'
+        user: 'gbolosta@gmail.com',
+        pass: '6022141517673245'
     }
 });
-
+var ticker;
 app.use(passport.initialize());
 app.use(passport.session());
 var CronJob = require('cron').CronJob;
-new CronJob('* */1 * * * *', function() {
+new CronJob('* 5 9  * * 1-5', function() {
     var tickers=["XELB"];
     for(ticker in tickers){
         var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+tickers[ticker]+'&interval=1min&apikey=1977';
@@ -140,8 +140,6 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
   done(null, user);
 });
-
-var ticker=0;
 
 app.post('/stock', function(req, res){
     ticker=req.body.ticker;
