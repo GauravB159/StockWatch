@@ -203,9 +203,6 @@ body {
 .text2 {
   font-size: 22px; }
 
-.register {
-  display: none; }
-
 .desc {
   position: fixed;
   margin-left: 50%; }
@@ -213,6 +210,10 @@ body {
 .login, .register {
   margin-top: 30%;
   margin-left: 20%; }
+
+.register {
+  margin-top: 20%;
+  display: none; }
 
 .red, .red:hover, .red:focus, .red:active {
   color: red !important; }

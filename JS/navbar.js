@@ -8,3 +8,8 @@ $('#tickers2').keyup(function(){
     value=value.toUpperCase();
     $(this).val(value);
 });
+$('.boldem li').hover(function(){
+        $(this).addClass('o3');
+    }, function(){
+        $(this).removeClass('o3');
+});

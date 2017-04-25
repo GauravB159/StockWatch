@@ -16,14 +16,21 @@ $(document).ready(function(){
         $('.rmrd').toggle(200);
       });
     $("#rgb").click(function(){
-        $.post("/register",$("#rg").serialize(), function(data){
-            console.log(data);
-        }).done(function() {
-            alert( "User successfully created" );
-            })
-          .fail(function(response) {
-            console.log(response.responseText);
-          });
-        });    
+        var check1= /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/.test($("#email").val());
+        var check2= /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/.test($("#password").val());
+        if(check1 === true && check2 === true){
+            $.post("/register",$("#rg").serialize(), function(data){
+                alert( "User successfully created" );
+            }).fail(function(response) {
+                alert(response.responseText);
+              });
+        }else{
+            if(check1 === false){
+                alert("Enter a valid email address, please.");
+            }else{
+                alert("Enter a strong enough password");
+            }
+        }
+    }); 
     $('[data-toggle="tooltip"]').tooltip(); 
 });

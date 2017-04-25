@@ -102,15 +102,20 @@ new CronJob('* 5 9  * * 1-5', function() {
     }
 }, null, true,'America/New_York');
 var interval=60;
-function writeStock(url,name){
-http.get(url, function(res){
+function writeStock(url,name,callback){
+    http.get(url, function(res){
         var body = '';
         res.on('data', function(chunk){
         body += chunk;
     });
     res.on('end', function(){
         var tJson = JSON.parse(body);
-        fs.writeFileSync(name+'.json', JSON.stringify(tJson));
+        if(tJson.hasOwnProperty('Error Message')){
+            if (callback) callback(false);
+        }else{
+            fs.writeFileSync(name+'.json', JSON.stringify(tJson));
+            if (callback) callback(true);
+        }
     });
 
     }).on('error', function(e){
@@ -324,6 +329,12 @@ app.post('/sell',function(req,res){
         });
     }
 });
+app.get('/history',function(req,res){
+    var acc=req.session.passport.user.username; 
+    watch.findByUsername(acc,function(data){
+        
+    });
+});
 app.get('/watchlist',function(req,res,next){
     var acc=req.session.passport.user.username;  
     var up={"stocks":[]};
@@ -335,7 +346,7 @@ app.get('/watchlist',function(req,res,next){
             for(var i=0;i < user.length;i++){
                 var ticker=user[i].ticker;
                 var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
-                writeStock(url,"daily/"+ticker);
+                var check = writeStock(url,"daily/"+ticker);
                 var obj;
                 fs.readFile('daily/'+ticker+".json", 'utf8', function (err, data) {
                       if (err) throw err;
@@ -441,29 +452,38 @@ app.post('/register',function(req,res){
     var pass=req.body.password;
     var cpass=req.body.cpassword;
     var message;
-    if(pass != cpass){
+    var check1= /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/.test(eml);
+    var check2= /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/.test(pass);
+    if(check1 == false){
         res.status(400);
-        message="Passwords do not match";
+        res.send("Enter a valid email, please");
+    }else if(check2 == false){
+        res.send("Enter a strong enough password, please");
+    }else{
+        if(pass != cpass){
+            res.status(400);
+            message="Passwords do not match";
+        }
+        db.User.find({$or : [{username:uname},{email:eml}]}, function(err, data) {
+          if (err) throw err;
+          if(data == "" && pass == cpass){
+              user.create(uname,pass,eml,500);
+              res.sendFile('index.html', { root: __dirname} );
+          }else if(data != ""){
+              user.findByUsername(uname,function(data){
+                    res.status(400);
+                    if(data != null){
+                        message="Username already exists";
+                    }else if(pass != cpass){
+                        message="Passwords do not match";
+                    }else{
+                        message="Email already exists";
+                    }
+                    res.send(message);
+              });
+          }
+        });
     }
-    db.User.find({$or : [{username:uname},{email:eml}]}, function(err, data) {
-      if (err) throw err;
-      if(data == "" && pass == cpass){
-          user.create(uname,pass,eml,500);
-          res.sendFile('index.html', { root: __dirname} );
-      }else if(data != ""){
-          user.findByUsername(uname,function(data){
-                res.status(400);
-                if(data != null){
-                    message="Username already exists";
-                }else if(pass != cpass){
-                    message="Passwords do not match";
-                }else{
-                    message="Email already exists";
-                }
-                res.send(message);
-          });
-      }
-    });
 });
 
 app.post('/login',
@@ -478,11 +498,18 @@ app.post('/time',function(req, res){
       var url2 = 'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
       var url3 = 'http://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol='+ticker+'&apikey=1977';
       var url4 = 'http://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol='+ticker+'&apikey=1977';
-      writeStock(url,"interval");  
-      writeStock(url2,"daily/"+ticker);
-      writeStock(url3,"weekly");    
-      writeStock(url4,"monthly");        
-      res.send("OK");
+      var check = writeStock(url,"interval",function(check){
+          if(check == false){
+              res.status(400);
+              res.send("The entered stock ticker does not exist in out database");
+          }else{
+              writeStock(url2,"daily/"+ticker);
+              writeStock(url3,"weekly");    
+              writeStock(url4,"monthly");        
+              res.send("OK");
+          }
+      });  
+      
 });
 
 app.listen(port, function() {

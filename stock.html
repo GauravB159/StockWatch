@@ -25,10 +25,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>                        
         </button>
-      <a class="navbar-brand" href="#">StockWatch</a>
+      <a class="navbar-brand" href="index.html">StockWatch</a>
       <form class="navbar-form navbar-left mobsearch" method="POST" action="stock">
           <div class="input-group">
-            <input type="text" class="form-control formers" name="ticker" placeholder="Search a Stock eg. GOOG">
+            <input type="text" class="form-control formers" id="tickers" name="ticker" placeholder="Search a Stock eg. GOOG">
             <div class="input-group-btn">
               <button class="btn btn-default" type="submit">
                 <i class="glyphicon glyphicon-search"></i>
@@ -39,12 +39,12 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav boldem">
-          <li class="active"><a href="#">Home</a></li>
+          <li><a href="index.html">Home</a></li>
           <li><a href="currency" class="converter"><span class="glyphicon glyphicon-usd"> </span>Converter</a></li>
         </ul>
         <form class="navbar-form navbar-left desksearch" method="POST" action="stock">
           <div class="input-group">
-            <input type="text" class="form-control formers" name="ticker" placeholder="Search a Stock eg. GOOG">
+            <input type="text" class="form-control formers" id="tickers2" name="ticker" placeholder="Search a Stock eg. GOOG">
             <div class="input-group-btn">
               <button class="btn btn-default" type="submit">
                 <i class="glyphicon glyphicon-search"></i>
@@ -59,7 +59,7 @@
     <ul class="list-inline">
         <div class="desk"> 
              <li class="ticker text"></li>
-            <li class="text ibdesk ib"  style="border-left:3px solid black"><div data-toggle="tooltip" data-placement="bottom" title="Unit: Minutes. Smaller intervals take more time to load!">Refresh Rate: </div></li>
+            <li class="text ibdesk"  style="border-left:3px solid black"><div data-toggle="tooltip" data-placement="bottom" title="Unit: Minutes. Smaller intervals take more time to load!">Refresh Rate: </div></li>
             <li class="text ib ibdesk hidden sh ibcddesk monthly">Monthly</li>
             <li class="text ib ibdesk hidden sh ibcddesk weekly ">Weekly</li>
             <li class="text ib ibdesk hidden sh ibcddesk daily">Daily</li> 
@@ -68,16 +68,14 @@
             <li class="text ib ibdesk ibcl ibcldesk">15</li>
             <li class="text ib ibdesk ibcl ibcldesk">5</li>
             <li class="text ib ibdesk ibcl ibcldesk">1</li>
-            <li class="text graph icdesk"><i class="fa fa-line-chart"></i></li>
-            <li class="text buy iddesk">Buy</li>
-            <li class="text watch iddesk" style="border-right:0;">Watch</li>
+            <li class="text graph icdesk" style="border:2px solid black;border-bottom:1px solid black;"><i class="fa fa-line-chart"></i></li>
         </div>
         <div class="dropdown mob"> 
             <li class="ticker text"></li>
             <button class="btn btn-rmr dropdown-toggle" type="button" data-toggle="dropdown">Options
             <span class="caret"></span></button>
             <ul class="dropdown-menu dropdown-menu-right">
-                <li class="text ib dropdown-header ibmob abc"  style="border-left:3px solid black">Refresh Rate </li>
+                <li class="text dropdown-header ibmob abc"  style="border-left:3px solid black">Refresh Rate </li>
                 <li class="text ib hidden sh ibcd monthly ibmob">Monthly</li>
                 <li class="text ib hidden sh ibcd weekly ibmob">Weekly</li>
                 <li class="text ib hidden sh ibcd daily ibmob">Daily</li> 
@@ -88,8 +86,6 @@
                 <li class="text ib ibcl ibmob">1</li>
                 <li class="divider"></li>                
                 <li class="text graph ic ibmob">Graph</li>
-                <li class="text buy id ibmob">Buy</li>
-                <li class="text watch id ibmob" style="border-right:0;">Watch</li>
             </ul>
         </div>
         
@@ -133,128 +129,6 @@
     </div>
 </div>
 </div>
-<script>
-    var lastmin;
-    var chart=function(data,today,checker){
-                var width1 = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-                if(width1<768){
-                    width1=900;
-                }else{
-                    width1=width1-100;
-                }   
-                var col1=[];
-                for(var i=0;i<5;i++){
-                    col1[i]=[];
-                }
-                var format="";
-                var yform="";
-                if(checker == true){
-                    format='%Y-%m-%d %H:%M:%S';
-                    yform='%H:%M';
-                }else{
-                    format='%Y-%m-%d';
-                    yform='%Y-%m-%d';
-                }
-                for(var val in data){
-                    var hold=val;
-                    if(checker == true){
-                        var comp=val[8]+val[9];
-                        if(comp != today){
-                            break;
-                        }
-                    }else{
-                        hold=moment(val).format("YYYY-MM-DD");
-                    }
-                    col1[0].push(hold);
-                    col1[1].push(data[val]["1. open"]);
-                    col1[2].push(data[val]["2. high"]);
-                    col1[3].push(data[val]["3. low"]);
-                    col1[4].push(data[val]["4. close"]);
-                }
-                var chart = c3.generate({
-                size:{
-                    width:width1
-                },
-                bindto: '#chart',
-                padding: {
-                    right: 20,
-                    left:80,
-                    top:5
-                },
-                data: {
-                      x: 'date',
-                      xFormat: format,
-                      json: {
-                            date: col1[0],
-                            Open: col1[1],
-                            Close: col1[4],
-                            High: col1[2],
-                            Low: col1[3]
-                     }
-                },
-                axis : {
-                        x : {
-                            type : 'timeseries',
-                            label: "Time",
-                            tick : {
-                                format : yform
-                        }
-                    },
-                        y: {
-                            label: "Value",
-                            tick: {
-                                format: d3.format('.2f')
-                            }
-                        }
-                    }
-                });
-            }
-    var graphGen=function(val,checker){
-            $.getJSON(val+".json",function(data){
-                var interval=$('.acti').html();
-                var today=data["Meta Data"]["3. Last Refreshed"];
-                if(checker == true){
-                    var check=moment().tz("America/Toronto").format('DD');
-                    today=today[8]+today[9];
-                    if(check != today){
-                        alert("The stock market was closed today so no intraday data available");
-                        return;
-                    }
-                    data=data["Time Series ("+interval+"min)"];
-                }else{
-                    if(interval == "Daily"){
-                        data=data["Time Series ("+interval+")"];
-                    }else{
-                        data=data[interval+" Time Series"];
-                    }
-                }
-                chart(data,today,checker);
-            }); 
-        }
-    $(".graph").click(function(){
-        graphGen("interval",true);
-        $('.graph').css("border-left","3px solid black");
-        $('.bod').toggleClass("hidden");
-        $('.sh').toggleClass("hidden");
-        $('.watch').toggleClass("hidden");
-        $('.buy').toggleClass("hidden");    
-        $('.char').toggleClass("hidden");
-        if($('.ibcl').hasClass("checker") && !(lastmin.hasClass("acti"))){
-            $('.ib').removeClass("acti");
-            lastmin.addClass("acti");
-        }
-        $('.ibcl').toggleClass("checker");
-    });
-    $(".ibcl").click(function(){
-        lastmin=$(this);
-        if($(this).hasClass("checker")){
-            graphGen("interval",true);
-        }
-    });
-    $(".sh").click(function(){
-        var str=$(this).html();
-        graphGen(str.toLowerCase(),false);
-    });
-</script>
+<script src="../JS/navbar.js"></script>
 </body>
 </html>
