@@ -335,7 +335,9 @@ $(document).ready(function(){
         $('.bod').toggleClass("hidden");
         $('.sh').toggleClass("hidden");
         $('.watch').toggleClass("hidden");
-        $('.buy').toggleClass("hidden");    
+        $('.buy').toggleClass("hidden");  
+        $('.sell').toggleClass("hidden");  
+        $('.unwatch').toggleClass("hidden"); 
         $('.char').toggleClass("hidden");
         if($('.ibcl').hasClass("checker") && !(lastmin.hasClass("acti"))){
             $('.ib').removeClass("acti");

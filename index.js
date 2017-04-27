@@ -1,7 +1,6 @@
 var express = require("express");
 var bodyParser=require("body-parser");
 var http=require("http");
-var $=require("jquery");
 var app = express();
 var fs = require('fs');
 var db = require('./db');
@@ -13,18 +12,11 @@ var watch=new db.Watch();
 var history=new db.History();
 var moment = require('moment-timezone');
 var port = process.env.PORT || 5000;
-var cheerio = require('cheerio');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
-
-app.use(bodyParser.urlencoded({ extended: true })); 
-app.use(bodyParser.json());
-app.use(session({
-    secret: "Hello There", // connect-mongo session store
-    resave: true,
-    saveUninitialized: true
-}));
+var CronJob = require('cron').CronJob;
+var interval=60;
+var ticker;
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -33,15 +25,45 @@ var transporter = nodemailer.createTransport({
         pass: '6022141517673245'
     }
 });
-var ticker;
-app.use(passport.initialize());
-app.use(passport.session());
+
 var check = function(acc,res){
     if(acc == undefined){
         res.redirect("/");
     }
 }
-var CronJob = require('cron').CronJob;
+
+var writeStock = function(url,name,callback){
+    http.get(url, function(res){
+        var body = '';
+        res.on('data', function(chunk){
+        body += chunk;
+    });
+    res.on('end', function(){
+        var tJson = JSON.parse(body);
+        if(tJson.hasOwnProperty('Error Message')){
+            if (callback) callback(false);
+        }else{
+            fs.writeFileSync(name+'.json', JSON.stringify(tJson));
+            if (callback) callback(true);
+        }
+    });
+
+    }).on('error', function(e){
+          console.log("Got an error: ", e);
+    });
+}
+
+app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.json());
+app.use(session({
+    secret: "Hello There", // connect-mongo session store
+    resave: true,
+    saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.static(__dirname ));
+
 new CronJob('* 5 9  * * 1-5', function() {
     var tickers=["XELB"];
     for(ticker in tickers){
@@ -106,27 +128,13 @@ new CronJob('* 5 9  * * 1-5', function() {
         });
     }
 }, null, true,'America/New_York');
-var interval=60;
-function writeStock(url,name,callback){
-    http.get(url, function(res){
-        var body = '';
-        res.on('data', function(chunk){
-        body += chunk;
-    });
-    res.on('end', function(){
-        var tJson = JSON.parse(body);
-        if(tJson.hasOwnProperty('Error Message')){
-            if (callback) callback(false);
-        }else{
-            fs.writeFileSync(name+'.json', JSON.stringify(tJson));
-            if (callback) callback(true);
-        }
-    });
+new CronJob('0 0 0 0 0-11 *', function() {
+    db.User.update({},{balance:5000},{multi:true});
+    db.Stock.remove({});
+    db.History.remove({});
+}, null, true,'America/New_York');
 
-    }).on('error', function(e){
-          console.log("Got an error: ", e);
-    });
-}
+
 passport.use(new LocalStrategy(
   function(username, password, done) {
     db.User.findOne({ username: username }, function (err, user) {
@@ -142,7 +150,7 @@ passport.use(new LocalStrategy(
   }
 ));
 app.set('view engine', 'ejs');
-app.use(express.static(__dirname ));
+
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
