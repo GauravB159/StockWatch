@@ -226,6 +226,9 @@ body {
   color: white !important;
   box-shadow: none !important; }
 
+.btn-info {
+  display: none; }
+
 .rmr-red {
   background-color: rgba(180, 0, 0, 0.85); }
 
@@ -237,6 +240,19 @@ body {
 
 @media screen and (max-width: 768px) {
   .desc {
-    display: none; } }
+    display: none; }
+
+  .btn-info, .btn-info:hover, .btn-info.focus, .btn-info:focus, .btn.focus, .focus.bttn, .btn:focus, .bttn:focus, .btn:hover, .bttn:hover {
+    display: inline-block;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    border: none;
+    margin-left: 5px;
+    margin-bottom: 7px; }
+
+  .txt {
+    margin-top: 50px;
+    color: black;
+    font-size: 30px; } }
 
 /*# sourceMappingURL=index.css.map */

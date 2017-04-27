@@ -55,7 +55,20 @@
     <div class="row r1">
         <div class="col-sm-6">
             <form class="login" id="lgn" method="POST" action="/login">
-                <label class="text heading"> Login: </label>
+                <label class="text heading"> Login: </label><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Info</button>
+                <div id="myModal" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        <p class="text-center text txt">Welcome to StockWatch, a virtual stock market, where you can trade stocks at the current market price without spending any money. You start off each season with 5000 USD balance. Your goal is to maximize your balance by the end of the season. Each season lasts for a month after which everything is reset. Make sure to sell all your stocks before the season ends, good luck.</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
                 <div class="form-group">
                     <label for="uname" class="text2">Username: </label>
                     <input type="text" class="form-control former" name="username">
@@ -92,7 +105,7 @@
                 </div>
                 <div class="form-group">
                     <label for="password" class="text2">Password: </label>
-                    <input type="password" class="form-control former" id="password" name="password">
+                    <input type="password" class="form-control former" id="password" name="password" data-toggle="tooltip" data-placement="right" title="Must contain 8 characters, including 1 each of lower-case, upper-case, special and a digit">
                 </div>
                 <div class="form-group">
                     <label for="cpassword" class="text2">Confirm Password: </label>
