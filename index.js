@@ -329,14 +329,15 @@ app.post('/sell',function(req,res){
                             hold.status(305);
                             hold.send("You do not have stocks of this company");
                         }else{
-                            user.updateBalance(acc,balance);
-                            var date=moment().format("YYYY-MM-DD HH:mm z");
-                            history.create(ticker,acc,price,qty,date,"Sold");
+                            console.log(qty);
                             var cqty=data.quantity;
                             if(qty > cqty){
                                 hold.status(305);
                                 hold.send("You do not have those many stocks to sell");
                             }else{
+                                user.updateBalance(acc,balance);
+                                var date=moment().format("YYYY-MM-DD HH:mm");
+                                history.create(ticker,acc,price,qty,date,"Sold");
                                 qty=cqty-qty;
                                 if(qty == 0){
                                     stock.removeByUandS(acc,ticker);
