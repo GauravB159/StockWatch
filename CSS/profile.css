@@ -212,8 +212,9 @@ table {
   width: 100%; }
 
 .overflow {
-  width: 100%;
-  max-height: 420px; }
+  width: 102%;
+  max-height: 420px;
+  overflow-y: scroll; }
   .overflow table td {
     height: 80px; }
 
@@ -222,6 +223,7 @@ table {
 
 .otable {
   table-layout: fixed;
+  max-height: 420px;
   overflow-y: scroll; }
 
 .red {

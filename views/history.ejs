@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="../CSS/profile.css">
+  <link rel="stylesheet" href="../CSS/history.css">
 </head>
 <body>
 <nav class="navbar nav navbar-inverse navbar-fixed-top text" id="result">
@@ -32,7 +32,7 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav boldem">
-          <li><a href="history">History</a></li>
+          <li class="active"><a href="#">History</a></li>
           <li><a href="currencylogged" class="converter"><span class="glyphicon glyphicon-usd"> </span>Converter</a></li>
           <li><a href="watchlist">Watchlist</a></li>
         </ul>
@@ -51,7 +51,7 @@
         </form>
         <ul class="nav navbar-nav boldem navbar-right">
             <li><a href = "ranking">Ranking</a></li>
-            <li class="active"><a href="#"><span class="glyphicon glyphicon-user"> </span><span id="acc"><%= acc %></span></a></li>
+            <li><a href="loggedin"><span class="glyphicon glyphicon-user"> </span><span id="acc"><%= acc %></span></a></li>
             <li><a href="logout" class="logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
         </ul>
     </div>
@@ -59,54 +59,30 @@
 </nav>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-6 details">
-            <table class="text table-condensed" border=1>
+        <div class="table-responsive">  
+            <table class="text history" border=1>
                 <tr>
-                    <td>Username: </td>
-                    <td class="data"><%= acc %></td>
+                    <td>Ticker</td>
+                    <td>Price</td>
+                    <td>Quantity</td>
+                    <td>Purchase Date</td>
+                    <td>Transaction Type</td>
                 </tr>
-                <tr>
-                    <td>Email: </td>
-                    <td class="data"><span><%= email %></span></td>
-                </tr>
-                <tr>
-                    <td>Balance: </td>
-                    <td class="data"><span><%= balance %></td>
-                </tr>
-                <tr>
-                    <td>Rank: </td>
-                    <td class="data"><span><%= rank %></td>
-                </tr>
-                <tr>
-                    <td>Total stocks: </td>
-                    <td class="data"><span><%= total %></td>
-                </tr>
+                <%var history=hists["hists"];
+                    for(var i=0; i < history.length; i++) { 
+                        if(history[i].ttype === "Bought"){ %>
+                            <tr class="green">
+                        <% }else{ %>
+                            <tr class="red">
+                        <% } %>
+                        <td class="tick"><%= history[i].ticker %></td>
+                        <td><%= history[i].price %></td>
+                        <td><%= history[i].quantity %></td>
+                        <td><%= history[i].pdate %></td>
+                        <td><%= history[i].ttype %></td>
+                    </tr>
+                <% } %>
             </table>
-        </div>
-        <div class="col-sm-6 stocks">
-            <table class="text table-condensed hold" border=1>
-                <tr>
-                    <td class="data">Ticker</td>
-                    <td class="data">Quantity</td>
-                    <td class="data">Total Value</td>
-                </tr>
-            </table>
-            <div class="overflow">
-                <table class="text table-condensed otable" border=1>
-                        <%var stock=stocks["stocks"];
-                        for(var i=0; i < stock.length; i++) { %>
-                            <% if(stock[i].up == true){ %>
-                                <tr class="green">
-                            <% }else{ %>
-                                <tr class="red">
-                            <% } %>
-                            <td class="tick"><%= stock[i].ticker %></td>
-                            <td><%= stock[i].quantity %></td>
-                            <td><%= stock[i].value %></td>
-                        </tr>
-                    <% } %>
-                </table>
-            </div>
         </div>
     </div>
 </div>

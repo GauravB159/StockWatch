@@ -36,6 +36,11 @@ var transporter = nodemailer.createTransport({
 var ticker;
 app.use(passport.initialize());
 app.use(passport.session());
+var check = function(acc,res){
+    if(acc == undefined){
+        res.redirect("/");
+    }
+}
 var CronJob = require('cron').CronJob;
 new CronJob('* 5 9  * * 1-5', function() {
     var tickers=["XELB"];
@@ -152,6 +157,7 @@ app.post('/stock', function(req, res){
 });
 app.post('/stocklogged', function(req, res){
     ticker=req.body.ticker;
+    check(req.session.passport,res);
     var acc=req.session.passport.user.username;
     watch.findByUandS(acc,ticker,function(data){
         var watching;
@@ -165,6 +171,7 @@ app.post('/stocklogged', function(req, res){
 });
 app.get('/stocklogged', function(req, res){
     ticker=req.body.ticker;
+    check(req.session.passport,res);
     var acc=req.session.passport.user.username;
     watch.findByUandS(acc,ticker,function(data){
         var watching;
@@ -188,16 +195,19 @@ app.get('/currency', function(req, res){
 app.get('/currencylogged', function(req, res){
     var url="http://api.fixer.io/latest?base=USD";
     writeStock(url,"currency");    
+    check(req.session.passport,res);
     var acc=req.session.passport.user.username;
     res.render('currency',{acc:acc});
 });
 app.post('/watch',function(req,res){
+    check(req.session.passport,res);
     var acc=req.session.passport.user.username;
     var ticker=req.body.ticker;
     watch.create(ticker,acc);
     res.render('stock',{acc:acc,watching:true});
 });
 app.post('/unwatch',function(req,res){
+    check(req.session.passport,res);
     var acc=req.session.passport.user.username;
     var ticker=req.body.ticker;
     watch.removeByUandS(acc,ticker);
@@ -216,11 +226,13 @@ var timeCheck = function(){
 app.post('/buy',function(req,res){
     var qty=req.body.qty;
     var ticker=req.body.ticker;
-    var acc=req.session.passport.user.username;     
+    check(req.session.passport,res);
+    var acc=req.session.passport.user.username;    
     qty=parseInt(qty);
     var hold=res;
-    var check = timeCheck();
-    if(check == false){
+    //var check = timeCheck();
+    var checker = true;
+    if(checker == false){
         hold.send("The stock market is closed, please buy when it opens");
     }else{
         var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval=1min&apikey=1977';
@@ -251,7 +263,7 @@ app.post('/buy',function(req,res){
                         user.updateBalance(acc,balance);
                         var date=moment().format("YYYY-MM-DD HH:mm");
                         history.create(ticker,acc,price,qty,date,"Bought");
-                        stock.findByUandS(acc,price,obj['close'],function(data,price){
+                        stock.findByUandS(acc,ticker,obj['close'],function(data,price){
                             if(data == null){
                                 stock.create(acc,ticker,qty);
                             }else{
@@ -274,11 +286,13 @@ app.post('/buy',function(req,res){
 app.post('/sell',function(req,res){
     var qty=req.body.qty;
     var ticker=req.body.ticker;
-    var acc=req.session.passport.user.username;     
+    check(req.session.passport,res);
+    var acc=req.session.passport.user.username;    
     qty=parseInt(qty);
     var hold=res;
-    var check = timeCheck();
-    if(check == false){
+    //var check = timeCheck();
+    var checker = true;
+    if(checker == false){
         hold.send("The stock market is closed, please sell when it opens");
     }else{
         var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval=1min&apikey=1977';
@@ -308,7 +322,7 @@ app.post('/sell',function(req,res){
                             hold.send("You do not have stocks of this company");
                         }else{
                             user.updateBalance(acc,balance);
-                            var date=moment().format("YYYY-MM-DD HH:mm");
+                            var date=moment().format("YYYY-MM-DD HH:mm z");
                             history.create(ticker,acc,price,qty,date,"Sold");
                             var cqty=data.quantity;
                             if(qty > cqty){
@@ -316,7 +330,11 @@ app.post('/sell',function(req,res){
                                 hold.send("You do not have those many stocks to sell");
                             }else{
                                 qty=cqty-qty;
-                                stock.updateByUandS(acc,ticker,qty);
+                                if(qty == 0){
+                                    stock.removeByUandS(acc,ticker);
+                                }else{
+                                    stock.updateByUandS(acc,ticker,qty);
+                                }
                                 hold.send("Stocks sold successfully, your new balance is " + balance);
                             }
                         }
@@ -329,13 +347,35 @@ app.post('/sell',function(req,res){
         });
     }
 });
+
 app.get('/history',function(req,res){
-    var acc=req.session.passport.user.username; 
-    watch.findByUsername(acc,function(data){
-        
+    check(req.session.passport,res);
+    var acc=req.session.passport.user.username;
+    var historys={"hists":[]};
+    history.findByUsername(acc,function(data){
+        for(var i=0;i<data.length;i++){
+            var hist={"ticker":data[i].ticker,"price":data[i].price,"quantity":data[i].quantity,"pdate":data[i].pdate,"ttype":data[i].bos};
+            historys["hists"].push(hist);
+        }
+        res.render('history',{acc:acc,hists:historys});
     });
 });
+
+app.get('/ranking',function(req,res){
+    check(req.session.passport,res);
+    var acc=req.session.passport.user.username;
+    var ranks = {"ranks":[]};
+    db.User.find().sort({"balance":-1}).limit(100).exec(function(err,data){
+        for(var i=0;i<data.length;i++){
+            var rank={"username":data[i].username,"balance":data[i].balance};
+            ranks["ranks"].push(rank);
+        }
+        res.render('leaderboard',{acc:acc,ranks:ranks});
+    });
+});
+
 app.get('/watchlist',function(req,res,next){
+    check(req.session.passport,res);
     var acc=req.session.passport.user.username;  
     var up={"stocks":[]};
     var down={"stocks":[]};        
@@ -390,12 +430,15 @@ app.get('/ticker',function(req,res){
     res.send(ticker);
 });
 app.get('/loggedin',function(req,res){
+    check(req.session.passport,res);
     var acc=req.session.passport.user.username;  
     var stocks={"stocks":[]};
     stock.findByUsername(acc,function(users){
         if(users == ""){
             user.findByUsername(acc,function(users){
-                res.render('profile',{acc:acc,email:users.email,balance:users.balance,total: 0,stocks:stocks}); 
+                db.User.find({ balance : { $gt : users.balance }}).count(function(err,count){
+                    res.render('profile',{acc:acc,email:users.email,balance:users.balance,total: 0, rank:count+1 ,stocks:stocks}); 
+                });  
             });   
         }
         var total=0;
@@ -432,7 +475,10 @@ app.get('/loggedin',function(req,res){
                       stocks["stocks"].push(stocker);
                       if(i == users.length && symbol == ticker){
                         user.findByUsername(acc,function(user){
-                            res.render('profile',{acc:acc,email:user.email,balance:user.balance,total: total,stocks:stocks}); 
+                            db.User.find({ balance : { $gt : user.balance }}).count(function(err,count){
+                                res.render('profile',{acc:acc,email:user.email,balance:user.balance,total: total, rank:count+1 ,stocks:stocks}); 
+                            }); 
+                            
                         });            
                       }
                   });
@@ -467,7 +513,7 @@ app.post('/register',function(req,res){
         db.User.find({$or : [{username:uname},{email:eml}]}, function(err, data) {
           if (err) throw err;
           if(data == "" && pass == cpass){
-              user.create(uname,pass,eml,500);
+              user.create(uname,pass,eml,5000);
               res.sendFile('index.html', { root: __dirname} );
           }else if(data != ""){
               user.findByUsername(uname,function(data){
@@ -487,8 +533,9 @@ app.post('/register',function(req,res){
 });
 
 app.post('/login',
-  passport.authenticate('local', { successRedirect: '/loggedin',
-                                   failureRedirect: '/' }));
+    passport.authenticate('local', { successRedirect: '/loggedin',failureRedirect: '/' })
+);
+
 
 
 app.post('/time',function(req, res){ 

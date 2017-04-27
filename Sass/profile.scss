@@ -35,8 +35,9 @@ table{
     width:100%;
 }
 .overflow{
-    width:100%;
+    width:102%;
     max-height:420px;
+    overflow-y:scroll;
     table td{
         height:80px;
     }
@@ -46,6 +47,7 @@ table{
 }
 .otable{
     table-layout:fixed;
+    max-height:420px;
     overflow-y:scroll;
 }
 .red{

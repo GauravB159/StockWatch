@@ -180,13 +180,13 @@ historySchema.methods.printAllStocks = function(){
     });
 }
 historySchema.methods.findByUsername = function(uname,callback){
-    this.model('History').find({ username: uname }, function(err, user) {
+    this.model('History').find({ username: uname }).sort('-pdate').exec(function(err, user) {
       if (err) throw err;
       callback(user);
     });
 }
 historySchema.methods.findByUandS = function(uname,tick,callback){
-    this.model('History').find({ username: uname,ticker:tick }, function(err) {
+    this.model('History').find({ username: uname,ticker:tick }, function(err,user) {
       if (err) throw err;
       callback(user);
     });
