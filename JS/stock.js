@@ -312,11 +312,11 @@ $(document).ready(function(){
                 var today=data["Meta Data"]["3. Last Refreshed"];
                 if(checker == true){
                     var check=moment().tz("America/Toronto").format('DD');
-                    today=today[8]+today[9];
+                    /*today=today[8]+today[9];
                     if(check != today){
                         alert("The stock market was closed today so no intraday data available");
                         return;
-                    }
+                    }*/
                     data=data["Time Series ("+interval+"min)"];
                 }else{
                     if(interval == "Daily"){
