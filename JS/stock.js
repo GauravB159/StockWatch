@@ -256,9 +256,6 @@ $(document).ready(function(){
                     var hold=val;
                     if(checker == true){
                         var comp=val[8]+val[9];
-                        if(comp != today){
-                            break;
-                        }
                     }else{
                         hold=moment(val).format("YYYY-MM-DD");
                     }
@@ -310,18 +307,18 @@ $(document).ready(function(){
             $.getJSON(val+".json",function(data){
                 var interval=$('.acti').html();
                 var today=data["Meta Data"]["3. Last Refreshed"];
+                console.log(checker);
                 if(checker == true){
                     var check=moment().tz("America/Toronto").format('DD');
                     /*today=today[8]+today[9];
                     if(check != today){
                         alert("The stock market was closed today so no intraday data available");
                         return;
-                    }*/
+                    }*/ 
                     data=data["Time Series ("+interval+"min)"];
                 }else{
                     if(interval == "Daily"){
                         data=data["Time Series ("+interval+")"];
-                        console.log(data);
                     }else{
                         data=data[interval+" Time Series"];
                     }
