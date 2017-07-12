@@ -128,6 +128,7 @@ new CronJob('* 5 9  * * 1-5', function() {
         });
     }
 }, null, true,'America/New_York');
+
 new CronJob('0 0 0 0 0-11 *', function() {
     db.User.update({},{balance:5000},{multi:true});
     db.Stock.remove({});

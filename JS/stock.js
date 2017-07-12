@@ -232,7 +232,7 @@ $(document).ready(function(){
          }         
     });
     var lastmin;
-    var chart=function(data,today,checker){
+    var chart = function(data,today,checker){
                 var width1 = (window.innerWidth > 0) ? window.innerWidth : screen.width;
                 if(width1<768){
                     width1=900;
