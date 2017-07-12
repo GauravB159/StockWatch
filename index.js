@@ -1,6 +1,7 @@
 var express = require("express");
 var bodyParser=require("body-parser");
 var http=require("http");
+var https = require('https');
 var app = express();
 var fs = require('fs');
 var db = require('./db');
@@ -33,7 +34,7 @@ var check = function(acc,res){
 }
 
 var writeStock = function(url,name,callback){
-    http.get(url, function(res){
+    https.get(url, function(res){
         var body = '';
         res.on('data', function(chunk){
         body += chunk;
@@ -67,8 +68,8 @@ app.use(express.static(__dirname ));
 new CronJob('* 5 9  * * 1-5', function() {
     var tickers=["XELB"];
     for(ticker in tickers){
-        var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+tickers[ticker]+'&interval=1min&apikey=1977';
-        http.get(url, function(res){
+        var url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+tickers[ticker]+'&interval=1min&apikey=1977';
+        https.get(url, function(res){
             var body = '';
             res.on('data', function(chunk){
                 body += chunk;
@@ -244,8 +245,8 @@ app.post('/buy',function(req,res){
     if(checker == false){
         hold.send("The stock market is closed, please buy when it opens");
     }else{
-        var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval=1min&apikey=1977';
-        http.get(url, function(res){
+        var url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval=1min&apikey=1977';
+        https.get(url, function(res){
             var body = '';
             res.on('data', function(chunk){
             body += chunk;
@@ -304,8 +305,8 @@ app.post('/sell',function(req,res){
     if(checker == false){
         hold.send("The stock market is closed, please sell when it opens");
     }else{
-        var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval=1min&apikey=1977';
-        http.get(url, function(res){
+        var url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval=1min&apikey=1977';
+        https.get(url, function(res){
             var body = '';
             res.on('data', function(chunk){
             body += chunk;
@@ -394,7 +395,7 @@ app.get('/watchlist',function(req,res,next){
         }else{
             for(var i=0;i < user.length;i++){
                 var ticker=user[i].ticker;
-                var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
+                var url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
                 var check = writeStock(url,"daily/"+ticker);
                 var obj;
                 fs.readFile('daily/'+ticker+".json", 'utf8', function (err, data) {
@@ -453,7 +454,7 @@ app.get('/loggedin',function(req,res){
         var total=0;
         for(var i=0;i < users.length;i++){
             var ticker=users[i].ticker;
-            var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
+            var url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
             writeStock(url,"daily/"+ticker);
             var obj;
             fs.readFile('daily/'+ticker+".json", 'utf8', function (err, data) {
@@ -550,10 +551,10 @@ app.post('/login',
 app.post('/time',function(req, res){ 
       var body = req.body;
       interval=body.number;
-      var url = 'http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval='+interval+'min&apikey=1977';
-      var url2 = 'http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
-      var url3 = 'http://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol='+ticker+'&apikey=1977';
-      var url4 = 'http://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol='+ticker+'&apikey=1977';
+      var url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval='+interval+'min&apikey=1977';
+      var url2 = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+ticker+'&apikey=1977';
+      var url3 = 'https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol='+ticker+'&apikey=1977';
+      var url4 = 'https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol='+ticker+'&apikey=1977';
       var check = writeStock(url,"interval",function(check){
           if(check == false){
               res.status(400);
