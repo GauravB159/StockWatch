@@ -198,12 +198,12 @@ app.get('/chart', function(req, res){
     res.sendFile('chart.html', { root: __dirname} );
 });
 app.get('/currency', function(req, res){
-    var url="http://api.fixer.io/latest?base=USD";
+    var url="https://api.fixer.io/latest?base=USD";
     writeStock(url,"currency");    
     res.sendFile('currency.html', { root: __dirname} );
 });
 app.get('/currencylogged', function(req, res){
-    var url="http://api.fixer.io/latest?base=USD";
+    var url="https://api.fixer.io/latest?base=USD";
     writeStock(url,"currency");    
     check(req.session.passport,res);
     var acc=req.session.passport.user.username;
